@@ -1,4 +1,4 @@
-package com.example.vr_wedding_rental
+package com.varun.vr
 
 import io.flutter.embedding.android.FlutterActivity
 

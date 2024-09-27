@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_colors.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_text_styles.dart';
 import 'package:vr_wedding_rental/features/welcome/data/domain/presentation/bloc/welcome_bloc.dart';
-import 'package:vr_wedding_rental/features/welcome/data/domain/presentation/bloc/welcome_event.dart';
 import 'package:vr_wedding_rental/features/welcome/data/domain/presentation/bloc/welcome_satate.dart';
 
 class WelcomeScreen extends StatelessWidget {

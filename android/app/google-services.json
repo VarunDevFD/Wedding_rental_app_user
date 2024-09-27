@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "54251147633",
+    "project_id": "wedding-rental-595ab",
+    "storage_bucket": "wedding-rental-595ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54251147633:android:ad44e1660e231d092026d0",
+        "android_client_info": {
+          "package_name": "com.varun.vr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByBRstciOpAcbysqU8dspV48LJUlYl_6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
