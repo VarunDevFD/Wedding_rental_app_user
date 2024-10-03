@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart'; // Import screenuti
 import 'package:go_router/go_router.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_colors.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_text_styles.dart';
+import 'package:vr_wedding_rental/core/utils/widgets/custom_button.dart';
 import 'package:vr_wedding_rental/features/welcome/data/domain/presentation/bloc/welcome_bloc.dart';
 import 'package:vr_wedding_rental/features/welcome/data/domain/presentation/bloc/welcome_satate.dart';
 
@@ -22,75 +23,52 @@ class WelcomeScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Welcome Screen',
-                    style: AppTextStyles.titleStyle.copyWith(
-                      fontSize: 24.sp,
-                    ),
-                  ),
-                  SizedBox(height: 20.h), 
-                  Container(
-                    width: 200.w, 
+                  SizedBox(height: 20.h),
+                  SizedBox(
+                    width: 200.w,
                     height: 200.h,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.buttonTextColor,
-                    ),
                     child: Center(
                       child: Image.asset(
                         'assets/images/app_logo.png',
-                        width: 150.w, 
+                        width: 150.w,
                         height: 150.h,
                       ),
                     ),
                   ),
-                  SizedBox(height: 20.h), 
+                  SizedBox(height: 20.h),
                   Text(
                     'Welcome to VR Wedding Rental',
-                    style: AppTextStyles.subTitleStyle.copyWith(
-                      fontSize: 18.sp, 
+                    style: AppTextStyles.titleStyle.copyWith(
+                      fontSize: 22.sp,
                     ),
                   ),
-                  SizedBox(height: 40.h), 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          context.go('/sign-in');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: AppColors.black,
-                          backgroundColor: AppColors.buttonTextColor,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20.w, // Responsive horizontal padding
-                            vertical: 12.h, // Responsive vertical padding
+                  SizedBox(height: 40.h),
+                  Padding(
+                    padding: EdgeInsets.all(10.0.r),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: CustomButton(
+                            text: 'Sign In',
+                            onPressed: () {
+                              context.go('/sign-in');
+                            },
                           ),
                         ),
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(fontSize: 16.sp), // Responsive font
-                        ),
-                      ),
-                      SizedBox(width: 20.w), // Responsive spacing
-                      ElevatedButton(
-                        onPressed: () {
-                          context.go('/sign-up');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: AppColors.white,
-                          backgroundColor: AppColors.backgroundColor,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20.w, // Responsive horizontal padding
-                            vertical: 12.h, // Responsive vertical padding
+                        SizedBox(width: 20.w),
+                        Expanded(
+                          child: CustomButton(
+                            buttonColor: AppColors.backgroundColor,
+                            text: 'Sign Up',
+                            textStyle: AppTextStyles.buttonTextStyleWelcomeBn2,
+                            onPressed: () {
+                              context.go('/sign-up');
+                            },
                           ),
                         ),
-                        child: Text(
-                          'Sign Up',
-                          style: TextStyle(fontSize: 16.sp), // Responsive font
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

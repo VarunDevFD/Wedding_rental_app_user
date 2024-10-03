@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:vr_wedding_rental/core/utils/theme/app_text_styles.dart';
-import 'package:vr_wedding_rental/core/utils/widgets/custom_buttom.dart';
+import 'package:vr_wedding_rental/core/utils/widgets/custom_button.dart';
 
 class OnboardingPageWidget extends StatelessWidget {
   final String imagePath;
