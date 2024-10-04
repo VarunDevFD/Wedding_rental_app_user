@@ -1,71 +1,55 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vr_wedding_rental/features/auth/domain/repositories/auth_repo.dart';
-
-import 'auth_bloc_event.dart';
-import 'auth_bloc_state.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:vr_wedding_rental/features/auth/domain/entities/user_entity.dart';
+import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_email_password.dart';
+import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_up_with_email_password.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_event.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepository repository;
+  final SignInWithEmailPassword signInWithEmailPassword;
+  final SignUpWithEmailPassword signUpWithEmailPassword;
+  final GoogleSignIn googleSignIn;
 
-  AuthBloc({required this.repository}) : super(AuthInitial()) {
-    // Google Sign In
-    on<SignInGoogleEvent>((event, emit) async {
+  AuthBloc({
+    required this.signInWithEmailPassword,
+    required this.signUpWithEmailPassword,
+    required this.googleSignIn,
+  }) : super(AuthInitial()) {
+    on<SignInEvent>((event, emit) async {
       emit(AuthLoading());
       try {
-        final user = await repository.signInWithGoogle();
-        if (user != null) {
-          emit(Authenticated(user));
-        } else {
-          emit(AuthUnAuthenticated());
-        }
+        final user = await signInWithEmailPassword(event.email, event.password);
+        emit(Authenticated(user!));
       } catch (e) {
-        emit(AuthError(message: e.toString()));
+        emit(AuthError(e.toString()));
       }
     });
 
-    // Email/Password Sign In
-    on<SignInEmailPasswordEvent>((event, emit) async {
+    on<SignUpEvent>((event, emit) async {
       emit(AuthLoading());
       try {
-        final user = await repository.signInWithEmailAndPassword(
-            event.email, event.password);
-        if (user != null) {
-          emit(Authenticated(user));
-        } else {
-          emit(AuthUnAuthenticated());
-        }
+        final user = await signUpWithEmailPassword(event.email, event.password);
+        emit(Authenticated(user!));
       } catch (e) {
-        emit(AuthError(message: e.toString()));
+        emit(AuthError(e.toString()));
       }
     });
 
-    // Email/Password Sign Up
-    on<SignUpEmailPasswordEvent>((event, emit) async {
+    on<GoogleSignInEvent>((event, emit) async {
       emit(AuthLoading());
       try {
-        final user = await repository.signUpWithEmailAndPassword(
-            event.email, event.password);
-        if (user != null) {
-          emit(Authenticated(user));
-        } else {
-          emit(AuthUnAuthenticated());
-        }
+        final user = googleSignIn;
+        emit(Authenticated(user as AuthUser));
       } catch (e) {
-        emit(AuthError(message: e.toString()));
+        emit(AuthError(e.toString()));
       }
     });
 
-    // // Sign Out
-    // on<SignOutEvent>((event, emit) async {
-    //   emit(AuthLoading());
-    //   try {
-    //     await repository.signOut();
-    //     emit(AuthUnAuthenticated());
-    //   } catch (e) {
-    //     emit(AuthError(message: e.toString()));
-    //   }
-    // });
+    on<SignOutEvent>((event, emit) async {
+      emit(AuthLoading());
+      await googleSignIn.signOut();
+      emit(Unauthenticated());
+    });
   }
 }
-
-

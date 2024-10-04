@@ -37,12 +37,12 @@ class SignInScreen extends StatelessWidget {
     }
 
     // Dispatch login event to AuthBloc
-    context.read<AuthBloc>().add(SignInEmailPasswordEvent(email, password));
+    context.read<AuthBloc>().add(SignInEvent(email, password));
   }
 
   void signInWithGoogle(BuildContext context) {
     // Dispatch Google Sign-In event to AuthBloc
-    context.read<AuthBloc>().add(SignInGoogleEvent());
+    context.read<AuthBloc>().add(GoogleSignInEvent());
   }
 
   @override
