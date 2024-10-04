@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
@@ -27,7 +26,7 @@ class SplashScreen extends StatelessWidget {
         child: Center(
           child: Image.asset(
             'assets/images/app_logo.png',
-            width: 200.w,
+            width: 200,
             height: 200.h,
           ),
         ),
