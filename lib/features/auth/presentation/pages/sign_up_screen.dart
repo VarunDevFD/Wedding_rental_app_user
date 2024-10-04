@@ -32,15 +32,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20.h),
-            TextField(
-              decoration: const InputDecoration(
+            const TextField(
+              decoration: InputDecoration(
                 labelText: 'Name',
                 border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 10.h),
-            TextField(
-              decoration: const InputDecoration(
+            const TextField(
+              decoration: InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
               ),

@@ -33,8 +33,8 @@ class _SignInScreenState extends State<SignInScreen> {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20.h),
-            TextField(
-              decoration: const InputDecoration(
+            const TextField(
+              decoration: InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
@@ -87,7 +87,7 @@ class _SignInScreenState extends State<SignInScreen> {
             SizedBox(height: 20.h),
             Row(
               children: [
-                Expanded(child: Divider(color: AppColors.black)),
+                const Expanded(child: Divider(color: AppColors.black)),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0.w),
                   child: Text(
@@ -95,7 +95,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     style: AppTextStyles.subTitleStyle,
                   ),
                 ),
-                Expanded(child: Divider(color: AppColors.black)),
+                const Expanded(child: Divider(color: AppColors.black)),
               ],
             ),
             SizedBox(height: 20.h),
@@ -143,7 +143,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
