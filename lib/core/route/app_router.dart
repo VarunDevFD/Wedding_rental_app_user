@@ -1,4 +1,7 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/pages/forgot_screen.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/pages/sign_in_screen.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/pages/sign_up_screen.dart';
 import 'package:vr_wedding_rental/features/home/presentation/page/home_screen.dart';
@@ -23,15 +26,27 @@ class AppRouter {
       ),
       GoRoute(
         path: '/sign-in',
-        builder: (context, state) => SignInScreen(),
+        builder: (context, state) {
+          final authSignInBloc =
+              context.read<AuthBloc>(); // Retrieve AuthBloc from context
+          return SignInScreen(
+              authBloc: authSignInBloc); // Pass the AuthBloc instance
+        },
       ),
       GoRoute(
-        path: '/sign-up',
-        builder: (context, state) => SignUpScreen(),
-      ),
+          path: '/sign-up',
+          builder: (context, state) {
+            final authSignUpBloc =
+                context.read<AuthBloc>(); // Retrieve AuthBloc from context
+            return SignUpScreen(authBloc: authSignUpBloc);
+          }),
       GoRoute(
         path: '/home',
         builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: '/forgotPassword',
+        builder: (context, state) => const ForgotPasswordScreen(),
       ),
     ],
   );

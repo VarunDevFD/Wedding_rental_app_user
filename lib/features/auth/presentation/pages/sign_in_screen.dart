@@ -14,8 +14,9 @@ class SignInScreen extends StatelessWidget {
   final passwordController = TextEditingController();
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
+  final AuthBloc authBloc; // Accept AuthBloc through constructor
 
-  SignInScreen({super.key});
+  SignInScreen({super.key, required this.authBloc});
 
   void submitCredentials(BuildContext context) {
     final email = emailController.text.trim();
@@ -37,18 +38,14 @@ class SignInScreen extends StatelessWidget {
     }
 
     // Dispatch login event to AuthBloc
-    context.read<AuthBloc>().add(SignInEvent(email, password));
-  }
-
-  void signInWithGoogle(BuildContext context) {
-    // Dispatch Google Sign-In event to AuthBloc
-    context.read<AuthBloc>().add(GoogleSignInEvent());
+    authBloc.add(SignInEvent(email: email, password: password));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<AuthBloc, AuthState>(
+      body: BlocListener<AuthBloc, AuthBlocState>(
+        bloc: authBloc, // Using the AuthBloc passed to the constructor
         listener: (context, state) {
           if (state is AuthLoading) {
             // Show loading indicator
@@ -135,7 +132,7 @@ class SignInScreen extends StatelessWidget {
 
   Widget _buildGoogleSignInButton(BuildContext context) {
     return GestureDetector(
-      onTap: () => signInWithGoogle(context),
+      onTap: () => authBloc.add(GoogleSignInEvent()),
       child: Container(
         height: 45,
         padding: const EdgeInsets.all(12),
@@ -146,7 +143,10 @@ class SignInScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/google.png', height: 25),
+            SizedBox(
+              height: 25,
+              child: Image.asset('assets/images/google.png'),
+            ),
             const SizedBox(width: 10),
             const Text('Sign in with Google'),
           ],

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // Import screenutil package
 import 'package:go_router/go_router.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_colors.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_text_styles.dart';
@@ -23,28 +22,28 @@ class WelcomeScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 20.h),
+                  const SizedBox(height: 20),
                   SizedBox(
-                    width: 200.w,
-                    height: 200.h,
+                    width: 200,
+                    height: 200,
                     child: Center(
                       child: Image.asset(
                         'assets/images/app_logo.png',
-                        width: 150.w,
-                        height: 150.h,
+                        width: 150,
+                        height: 150,
                       ),
                     ),
                   ),
-                  SizedBox(height: 20.h),
+                  const SizedBox(height: 20),
                   Text(
                     'Welcome to VR Wedding Rental',
                     style: AppTextStyles.titleStyle.copyWith(
-                      fontSize: 22.sp,
+                      fontSize: 22,
                     ),
                   ),
-                  SizedBox(height: 40.h),
+                  const SizedBox(height: 40),
                   Padding(
-                    padding: EdgeInsets.all(10.0.r),
+                    padding: const EdgeInsets.all(10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -56,7 +55,7 @@ class WelcomeScreen extends StatelessWidget {
                             },
                           ),
                         ),
-                        SizedBox(width: 20.w),
+                        const SizedBox(width: 20),
                         Expanded(
                           child: CustomButton(
                             buttonColor: AppColors.backgroundColor,

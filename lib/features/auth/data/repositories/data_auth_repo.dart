@@ -6,7 +6,9 @@ import '../../domain/entities/user_entity.dart';
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
 
-  AuthRepositoryImpl({required this.remoteDataSource});
+  AuthRepositoryImpl({
+    required this.remoteDataSource,
+  });
 
   @override
   Future<AuthUser?> signInWithEmailPassword(
@@ -14,7 +16,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final user =
         await remoteDataSource.signInWithEmailPassword(email, password);
     if (user != null) {
-      return AuthUser(id: user.uid, email: user.email!);
+      return AuthUser(id: user.id, email: user.email);
     }
     return null;
   }
@@ -25,7 +27,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final user =
         await remoteDataSource.signUpWithEmailPassword(email, password);
     if (user != null) {
-      return AuthUser(id: user.uid, email: user.email!);
+      return AuthUser(id: user.id, email: user.email);
     }
     return null;
   }
@@ -35,12 +37,14 @@ class AuthRepositoryImpl implements AuthRepository {
     final user = await remoteDataSource.signInWithGoogle();
     if (user != null) {
       return AuthUser(
-          id: user.uid, email: user.email!, displayName: user.displayName);
+        id: user.id,
+        email: user.email,
+        displayName: user.displayName,
+      );
     }
     return null;
   }
 
-  @override
   Future<void> signOut() async {
     await remoteDataSource.signOut();
   }
