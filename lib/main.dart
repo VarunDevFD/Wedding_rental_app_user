@@ -1,13 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:vr_wedding_rental/app.dart';
-import 'package:vr_wedding_rental/core/firebase_options.dart';
+import 'package:vr_wedding_rental/core/firebase/firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  //------FireBase-Initializing------
+  WidgetsFlutterBinding.ensureInitialized(); //---Ready before any async operation are executed---
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,   //---Connect-with-firebase_options.dart---
   );
 
+  //------Start-App-by-rendering------
   runApp(const MyApp());
 }

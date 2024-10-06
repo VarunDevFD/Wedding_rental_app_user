@@ -1,0 +1,93 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:vr_wedding_rental/features/auth/domain/entities/user_entity.dart';
+
+class AuthRemoteDataSource {
+  final FirebaseAuth firebaseAuth;
+  final GoogleSignIn googleSignIn;
+
+  AuthRemoteDataSource({
+    required this.firebaseAuth,
+    required this.googleSignIn,
+  });
+
+  Future<AuthUser?> signInWithEmailPassword(
+      String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user != null
+          ? AuthUser(
+              id: userCredential.user!.uid, email: userCredential.user!.email!)
+          : null;
+    } on FirebaseAuthException catch (e) {
+      // Handle Firebase specific exceptions
+      throw Exception('Sign in failed: ${e.message}');
+    } catch (e) {
+      throw Exception('An unknown error occurred: $e');
+    }
+  }
+
+  Future<AuthUser?> signUpWithEmailPassword(
+      String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user != null
+          ? AuthUser(
+              id: userCredential.user!.uid,
+              email: userCredential.user!.email!,
+            )
+          : null;
+    } on FirebaseAuthException catch (e) {
+      // Handle specific Firebase exceptions
+      throw Exception('Sign up failed: ${e.message}');
+    } catch (e) {
+      throw Exception('An unknown error occurred: $e');
+    }
+  }
+
+  Future<AuthUser?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      if (googleUser == null) {
+        throw Exception('Google sign in aborted');
+      }
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      UserCredential userCredential =
+          await firebaseAuth.signInWithCredential(credential);
+      return userCredential.user != null
+          ? AuthUser(
+              id: userCredential.user!.uid,
+              email: userCredential.user!.email!,
+              displayName: userCredential.user!.displayName,
+            )
+          : null;
+    } on FirebaseAuthException catch (e) {
+      // Handle specific Firebase exceptions
+      throw Exception('Google sign in failed: ${e.message}');
+    } catch (e) {
+      throw Exception('An unknown error occurred: $e');
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await firebaseAuth.signOut();
+      await googleSignIn.signOut();
+    } catch (e) {
+      throw Exception('Sign out failed: $e');
+    }
+  }
+}

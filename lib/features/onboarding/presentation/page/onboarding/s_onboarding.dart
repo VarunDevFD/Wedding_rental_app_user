@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_colors.dart';
@@ -54,7 +51,6 @@ class OnboardingScreen extends StatelessWidget {
                             },
                             onContinuePressed: () {
                               if (isLastPage) {
-                                log("Keri");
                                 context.go('/welcome');
                               } else {
                                 pageController.nextPage(
@@ -69,14 +65,14 @@ class OnboardingScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.h),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       child: SmoothPageIndicator(
                         controller: pageController,
                         count: state.pages.length,
-                        effect: JumpingDotEffect(
-                          dotWidth: 8.w,
-                          dotHeight: 8.h,
-                          spacing: 16.w,
+                        effect: const JumpingDotEffect(
+                          dotWidth: 8,
+                          dotHeight: 8,
+                          spacing: 16,
                           activeDotColor: AppColors.buttonTextColor,
                           dotColor: AppColors.backgroundColor,
                         ),

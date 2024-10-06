@@ -7,7 +7,7 @@ class BookingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Placeholder(
-        child: Text("Booking"),
+        child: Center(child: Text("Booking")),
       ),
     );
   }

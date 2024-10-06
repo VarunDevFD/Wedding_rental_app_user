@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:vr_wedding_rental/core/utils/theme/app_text_styles.dart';
-import 'package:vr_wedding_rental/core/utils/widgets/custom_buttom.dart';
+import 'package:vr_wedding_rental/core/utils/widgets/custom_button.dart';
 
 class OnboardingPageWidget extends StatelessWidget {
   final String imagePath;
@@ -34,8 +32,8 @@ class OnboardingPageWidget extends StatelessWidget {
               child: Center(
                 child: Image.asset(
                   imagePath,
-                  width: 250.w,
-                  height: 250.w,
+                  width: 250,
+                  height: 250,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -43,7 +41,7 @@ class OnboardingPageWidget extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
                     Text(
@@ -51,7 +49,7 @@ class OnboardingPageWidget extends StatelessWidget {
                       style: AppTextStyles.titleStyle,
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 10.h),
+                    const SizedBox(height: 10),
                     Text(
                       subText,
                       style: AppTextStyles.subTitleStyle,
@@ -61,7 +59,7 @@ class OnboardingPageWidget extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 50.h),
+            const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -71,12 +69,12 @@ class OnboardingPageWidget extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 50.h),
+            const SizedBox(height: 50),
           ],
         ),
         Positioned(
-          top: 40.h,
-          right: 20.w,
+          top: 40,
+          right: 20,
           child: isLastPage
               ? const SizedBox()
               : TextButton(
