@@ -15,7 +15,6 @@ import 'package:vr_wedding_rental/features/auth/presentation/widgets/custom_text
 import 'package:vr_wedding_rental/features/auth/presentation/widgets/sign_in_nav_widget.dart';
 
 class SignUpScreen extends StatelessWidget {
-  // Controllers for the text fields
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
@@ -27,9 +26,7 @@ class SignUpScreen extends StatelessWidget {
   final FocusNode newPasswordFocusNode = FocusNode();
   final FocusNode confirmPasswordFocusNode = FocusNode();
 
-  final AuthBloc authBloc; // Accept AuthBloc through constructor
-
-  SignUpScreen({super.key, required this.authBloc});
+  SignUpScreen({super.key});
 
   // Global key for the form
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -41,6 +38,13 @@ class SignUpScreen extends StatelessWidget {
       Future.delayed(const Duration(seconds: 2), () {
         context.go('/home'); // Navigate to home on success
       });
+
+      BlocProvider.of<AuthBloc>(context).add(
+        SignUpEvent(
+          email: emailController.toString(),
+          password: newPasswordController.toString(),
+        ),
+      );
     }
   }
 
@@ -81,7 +85,6 @@ class SignUpScreen extends StatelessWidget {
         create: (_) => TogglePasswordBloc(), // Toggle Password Bloc
 
         child: BlocListener<AuthBloc, AuthBlocState>(
-          bloc: authBloc,
           listener: (context, state) {
             if (state is AuthLoading) {
               // Show loading indicator
@@ -121,8 +124,8 @@ class SignUpScreen extends StatelessWidget {
                           hintText: 'Enter your Name',
                           label: 'Name',
                           obscureText: false,
-                          validator: (value) => value == null || value.isEmpty 
-                              ? 'Please enter your name' 
+                          validator: (value) => value == null || value.isEmpty
+                              ? 'Please enter your name'
                               : null,
                           onSubmitted: (_) => FocusScope.of(context)
                               .requestFocus(emailFocusNode),
@@ -150,7 +153,8 @@ class SignUpScreen extends StatelessWidget {
                         const SizedBox(height: 20),
                         const OrDivider(),
                         const SizedBox(height: 20),
-                        _buildGoogleSignInButton(context), // Google Sign In Button
+                        _buildGoogleSignInButton(
+                            context), // Google Sign In Button
                         const SizedBox(height: 30),
                         const SignInNavigation(),
                         const SizedBox(height: 10),
@@ -218,7 +222,7 @@ class SignUpScreen extends StatelessWidget {
 
   Widget _buildGoogleSignInButton(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.read<AuthBloc>().add(GoogleSignInEvent()),
+      onTap: () => BlocProvider.of<AuthBloc>(context).add(GoogleSignInEvent()),
       child: Container(
         height: 45,
         padding: const EdgeInsets.all(12),

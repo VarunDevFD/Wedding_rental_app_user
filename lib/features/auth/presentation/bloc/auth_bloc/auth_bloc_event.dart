@@ -13,7 +13,7 @@ class SignUpEvent extends AuthEvent {
   final String email;
   final String password;
 
-  SignUpEvent(this.email, this.password);
+  SignUpEvent({required this.email, required this.password});
 }
 
 class GoogleSignInEvent extends AuthEvent {}

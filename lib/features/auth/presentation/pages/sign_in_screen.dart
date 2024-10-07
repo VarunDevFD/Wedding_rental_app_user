@@ -14,9 +14,9 @@ class SignInScreen extends StatelessWidget {
   final passwordController = TextEditingController();
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
-  final AuthBloc authBloc; // Accept AuthBloc through constructor
+  // final AuthBloc authBloc; // Accept AuthBloc through constructor
 
-  SignInScreen({super.key, required this.authBloc});
+  SignInScreen({super.key});
 
   void submitCredentials(BuildContext context) {
     final email = emailController.text.trim();
@@ -38,14 +38,15 @@ class SignInScreen extends StatelessWidget {
     }
 
     // Dispatch login event to AuthBloc
-    authBloc.add(SignInEvent(email: email, password: password));
+    BlocProvider.of<AuthBloc>(context).add(
+      SignInEvent(email: email, password: password),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<AuthBloc, AuthBlocState>(
-        bloc: authBloc, // Using the AuthBloc passed to the constructor
         listener: (context, state) {
           if (state is AuthLoading) {
             // Show loading indicator
@@ -132,7 +133,7 @@ class SignInScreen extends StatelessWidget {
 
   Widget _buildGoogleSignInButton(BuildContext context) {
     return GestureDetector(
-      onTap: () => authBloc.add(GoogleSignInEvent()),
+      onTap: () => BlocProvider.of<AuthBloc>(context).add(GoogleSignInEvent()),
       child: Container(
         height: 45,
         padding: const EdgeInsets.all(12),

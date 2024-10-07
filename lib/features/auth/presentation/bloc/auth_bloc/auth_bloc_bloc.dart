@@ -23,7 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
       emit(AuthLoading());
       try {
         final user = await signInWithEmailPassword(event.email, event.password);
-        emit(Authenticated(user!)); // Emit Authenticated state
+        emit(Authenticated(user!)); 
       } catch (e) {
         emit(AuthError(e.toString())); // Emit error state
       }
