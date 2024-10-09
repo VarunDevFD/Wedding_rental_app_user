@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vr_wedding_rental/features/auth/data/datasources/data_auth_datasourse.dart';
 import 'package:vr_wedding_rental/features/auth/domain/repositories/auth_repo.dart';
 
@@ -22,27 +23,20 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthUser?> signUpWithEmailPassword(
-      String email, String password) async {
-    final user =
-        await remoteDataSource.signUpWithEmailPassword(email, password);
-    if (user != null) {
-      return AuthUser(id: user.id, email: user.email);
-    }
+  Future<void> signUpWithEmailPassword(String email, String password) {
+    return remoteDataSource.signUpWithEmailPassword(email, password);
+  }
+
+  @override
+  Future<User?> signInWithGoogle() async {
+    final user = await remoteDataSource.signInWithGoogle();
+    if (user != null) {}
     return null;
   }
 
   @override
-  Future<AuthUser?> signInWithGoogle() async {
-    final user = await remoteDataSource.signInWithGoogle();
-    if (user != null) {
-      return AuthUser(
-        id: user.id,
-        email: user.email,
-        displayName: user.displayName,
-      );
-    }
-    return null;
+  User? getCurrentUser() {
+    return remoteDataSource.getCurrentUser();
   }
 
   Future<void> signOut() async {

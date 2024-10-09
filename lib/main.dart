@@ -13,8 +13,7 @@ void main() async {
         .currentPlatform, //---Connect-with-firebase_options.dart---
   );
 
-  //------Initialize-Dependency-injection------
-  await init();
+  await init(); //------Initialize-Dependency-injection------
 
   //------Start-App-by-rendering------
   runApp(const MyApp());

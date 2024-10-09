@@ -14,7 +14,7 @@ class SignInScreen extends StatelessWidget {
   final passwordController = TextEditingController();
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
-  // final AuthBloc authBloc; // Accept AuthBloc through constructor
+  
 
   SignInScreen({super.key});
 

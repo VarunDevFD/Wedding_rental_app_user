@@ -1,6 +1,12 @@
-import 'package:vr_wedding_rental/features/auth/domain/entities/user_entity.dart';
+import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-abstract class AuthEvent {}
+
+// Base class for all auth events, extending Equatable
+abstract class AuthEvent extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
 class SignInEvent extends AuthEvent {
   final String email;
@@ -21,7 +27,7 @@ class GoogleSignInEvent extends AuthEvent {}
 class SignOutEvent extends AuthEvent {}
 
 class AuthEventState {
-  final AuthUser? user;
+  final User? user;
   final bool isLoading;
   final String? errorMessage;
 

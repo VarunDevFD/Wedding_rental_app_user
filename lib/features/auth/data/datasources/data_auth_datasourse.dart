@@ -31,7 +31,16 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<AuthUser?> signUpWithEmailPassword(
+  //--------------------------SignUp --Get the User ----------------------------
+
+  User? getCurrentUser() {
+    return firebaseAuth.currentUser;
+  }
+
+
+  //--------------------------Sin-Up-Email-&-Password---------------------------
+
+  Future<User?> signUpWithEmailPassword(
       String email, String password) async {
     try {
       UserCredential userCredential =
@@ -39,12 +48,7 @@ class AuthRemoteDataSource {
         email: email,
         password: password,
       );
-      return userCredential.user != null
-          ? AuthUser(
-              id: userCredential.user!.uid,
-              email: userCredential.user!.email!,
-            )
-          : null;
+      return userCredential.user;
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase exceptions
       throw Exception('Sign up failed: ${e.message}');
@@ -53,7 +57,10 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<AuthUser?> signInWithGoogle() async {
+  //---------------------------Sign-In-Google-----------------------------------
+
+
+  Future<User?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
@@ -67,13 +74,7 @@ class AuthRemoteDataSource {
       );
       UserCredential userCredential =
           await firebaseAuth.signInWithCredential(credential);
-      return userCredential.user != null
-          ? AuthUser(
-              id: userCredential.user!.uid,
-              email: userCredential.user!.email!,
-              displayName: userCredential.user!.displayName,
-            )
-          : null;
+      return userCredential.user ;
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase exceptions
       throw Exception('Google sign in failed: ${e.message}');
@@ -81,6 +82,8 @@ class AuthRemoteDataSource {
       throw Exception('An unknown error occurred: $e');
     }
   }
+
+  //-------------------------Sign-Out-------------------------------------------
 
   Future<void> signOut() async {
     try {

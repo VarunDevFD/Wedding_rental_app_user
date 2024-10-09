@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
             signInWithEmailPassword: GetIt.I(),
             signUpWithEmailPassword: GetIt.I(),
             googleSignIn: GetIt.I(),
+            getCurrentUser: GetIt.I(),
           ),
         ),
       ],

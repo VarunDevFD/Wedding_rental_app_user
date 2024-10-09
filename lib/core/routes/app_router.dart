@@ -10,19 +10,38 @@ import 'package:vr_wedding_rental/features/welcome/data/domain/presentation/page
 class AppRouter {
   static final GoRouter router = GoRouter(
     routes: [
-      GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
       GoRoute(
-          path: '/onboarding',
-          builder: (context, state) => const OnboardingScreen()),
+        path: '/',
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
-          path: '/welcome', builder: (context, state) => const WelcomeScreen()),
-      GoRoute(path: '/sign-in', builder: (context, state) => SignInScreen()),
-      GoRoute(path: '/sign-up', builder: (context, state) => SignUpScreen()),
-      GoRoute(path: '/home', builder: (context, state) => HomeScreen()),
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingScreen(),
+      ),
       GoRoute(
-          path: '/forgotPassword',
-          builder: (context, state) => const ForgotPasswordScreen()),
-      GoRoute(path: '/home', builder: (context, state) => HomeScreen()),
+        path: '/welcome',
+        builder: (context, state) => const WelcomeScreen(),
+      ),
+      GoRoute(
+        path: '/sign-in',
+        builder: (context, state) => SignInScreen(),
+      ),
+      GoRoute(
+        path: '/sign-up',
+        builder: (context, state) => SignUpScreen(),
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => HomeScreen(),
+      ),
+      GoRoute(
+        path: '/forgotPassword',
+        builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => HomeScreen(),
+      ),
     ],
   );
 }
