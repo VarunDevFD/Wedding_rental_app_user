@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:vr_wedding_rental/core/utils/app_exception.dart';
 import 'package:vr_wedding_rental/features/auth/domain/entities/user_entity.dart';
 
 class AuthRemoteDataSource {
@@ -37,11 +38,9 @@ class AuthRemoteDataSource {
     return firebaseAuth.currentUser;
   }
 
-
   //--------------------------Sin-Up-Email-&-Password---------------------------
 
-  Future<User?> signUpWithEmailPassword(
-      String email, String password) async {
+  Future<User?> signUpWithEmailPassword(String email, String password) async {
     try {
       UserCredential userCredential =
           await firebaseAuth.createUserWithEmailAndPassword(
@@ -59,7 +58,6 @@ class AuthRemoteDataSource {
 
   //---------------------------Sign-In-Google-----------------------------------
 
-
   Future<User?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
@@ -74,12 +72,24 @@ class AuthRemoteDataSource {
       );
       UserCredential userCredential =
           await firebaseAuth.signInWithCredential(credential);
-      return userCredential.user ;
+      return userCredential.user;
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase exceptions
       throw Exception('Google sign in failed: ${e.message}');
     } catch (e) {
       throw Exception('An unknown error occurred: $e');
+    }
+  }
+
+  //-------------------------Forgot-Password-------------------------------------------
+
+  Future<void> resetPassword(String email) async {
+    try {
+      // Send the password reset email
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      // Throw an AppException with the error details and an alert message
+      throw AppException(details: e.toString(), alert: e.toString());
     }
   }
 

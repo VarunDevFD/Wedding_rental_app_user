@@ -1,37 +1,51 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:vr_wedding_rental/core/firebase/firebase_options.dart';
 import 'package:vr_wedding_rental/features/auth/data/datasources/data_auth_datasourse.dart';
 import 'package:vr_wedding_rental/features/auth/data/repositories/data_auth_repo.dart';
 import 'package:vr_wedding_rental/features/auth/domain/repositories/auth_repo.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/auth_user.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_email_password.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_google.dart';
-import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_up_with_email_password.dart'; // Import this
+import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_up_with_email_password.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
 
-final getIt = GetIt.instance;
+final serviceLocator = GetIt.instance;
 
 Future<void> init() async {
-  // Register Firebase dependencies
-  getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-  getIt.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
+  //--------------------Connect-with-firebase_options.dart----------------------
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  //--------------------Auth-Firebase-dependencies------------------------------
+  serviceLocator
+      .registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+  serviceLocator.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
 
-  // Register Data Sources
-  getIt.registerLazySingleton<AuthRemoteDataSource>(
+  //--------------------Auth Data Sources---------------------------------------
+  serviceLocator.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSource(
-      firebaseAuth: getIt<FirebaseAuth>(),
-      googleSignIn: getIt<GoogleSignIn>(),
+      firebaseAuth: serviceLocator<FirebaseAuth>(),
+      googleSignIn: serviceLocator<GoogleSignIn>(),
     ),
   );
 
-  // SignUp Repositories
-  getIt.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(remoteDataSource: getIt()),
+  //--------------------Auth Repositories---------------------------------------
+  serviceLocator.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(remoteDataSource: serviceLocator()),
   );
 
-  // SignUp Use Cases
-  getIt.registerLazySingleton(() => SignUpWithEmailPassword(getIt()));
-  getIt.registerLazySingleton(() => SignInWithEmailPassword(getIt()));
-  getIt.registerLazySingleton(() => SignInWithGoogle(getIt()));
-  getIt.registerLazySingleton(() => GetCurrentUser(repository: getIt()));
+  //--------------------Auth Use Cases------------------------------------------
+  serviceLocator
+      .registerLazySingleton(() => SignUpWithEmailPassword(serviceLocator()));
+  serviceLocator
+      .registerLazySingleton(() => SignInWithEmailPassword(serviceLocator()));
+  serviceLocator
+      .registerLazySingleton(() => SignInWithGoogle(serviceLocator()));
+  serviceLocator.registerLazySingleton(
+      () => GetCurrentUser(repository: serviceLocator()));
+  serviceLocator
+      .registerLazySingleton(() => AuthBloc(googleSignIn: serviceLocator()));
 }

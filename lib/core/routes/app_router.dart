@@ -36,7 +36,7 @@ class AppRouter {
       ),
       GoRoute(
         path: '/forgotPassword',
-        builder: (context, state) => const ForgotPasswordScreen(),
+        builder: (context, state) => ForgotPasswordScreen(),
       ),
       GoRoute(
         path: '/home',

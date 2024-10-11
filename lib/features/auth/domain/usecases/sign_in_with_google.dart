@@ -7,6 +7,7 @@ class SignInWithGoogle {
   SignInWithGoogle(this.repository);
 
   Future<User?> call() {
-    return repository.signInWithGoogle(); // Call the sign-in method from the repository
+    return repository
+        .signInWithGoogle(); // Call the sign-in method from the repository
   }
 }

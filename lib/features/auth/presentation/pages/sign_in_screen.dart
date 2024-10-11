@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_colors.dart';
 import 'package:vr_wedding_rental/core/utils/widgets/custom_button.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
@@ -12,9 +13,8 @@ import 'package:vr_wedding_rental/features/auth/presentation/widgets/sign_up_nav
 class SignInScreen extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final FocusNode emailFocusNode = FocusNode();
-  final FocusNode passwordFocusNode = FocusNode();
-  
+  final emailFocusNode = FocusNode();
+  final passwordFocusNode = FocusNode();
 
   SignInScreen({super.key});
 
@@ -56,11 +56,10 @@ class SignInScreen extends StatelessWidget {
               builder: (_) => const Center(child: CircularProgressIndicator()),
             );
           } else if (state is Authenticated) {
-            Navigator.of(context).pop(); // Remove loading indicator
-            Navigator.of(context)
-                .pushNamed('/home'); // Navigate to home on success
+            context.pop(); // Remove loading indicator
+            context.go('/home'); // Navigate to home on success
           } else if (state is AuthError) {
-            Navigator.of(context).pop(); // Remove loading indicator
+            context.pop(); // Remove loading indicator
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );

@@ -1,4 +1,3 @@
-import 'package:vr_wedding_rental/features/auth/domain/entities/user_entity.dart';
 import 'package:vr_wedding_rental/features/auth/domain/repositories/auth_repo.dart';
 
 class SignInWithEmailPassword {
@@ -6,7 +5,7 @@ class SignInWithEmailPassword {
 
   SignInWithEmailPassword(this.repository);
 
-  Future<AuthUser?> call(String email, String password) {
-    return repository.signInWithEmailPassword(email, password);
+  Future<void> call(String email, String password) async {
+    return await repository.signInWithEmailPassword(email, password);
   }
 }

@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vr_wedding_rental/core/routes/app_router.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_bloc.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -13,12 +14,13 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => AuthBloc(
-            signInWithEmailPassword: GetIt.I(),
-            signUpWithEmailPassword: GetIt.I(),
+            // signInWithEmailPassword: GetIt.I(),
+            // signUpWithEmailPassword: GetIt.I(),
             googleSignIn: GetIt.I(),
-            getCurrentUser: GetIt.I(),
+            // getCurrentUser: GetIt.I(),
           ),
         ),
+        BlocProvider(create: (_) => ForgetPasswordBloc()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

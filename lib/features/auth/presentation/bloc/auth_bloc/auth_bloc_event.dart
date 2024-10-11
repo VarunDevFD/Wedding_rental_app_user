@@ -1,8 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-
-// Base class for all auth events, extending Equatable
 abstract class AuthEvent extends Equatable {
   @override
   List<Object?> get props => [];
@@ -13,6 +10,9 @@ class SignInEvent extends AuthEvent {
   final String password;
 
   SignInEvent({required this.email, required this.password});
+
+  @override
+  List<Object> get props => [email, password];
 }
 
 class SignUpEvent extends AuthEvent {
@@ -20,16 +20,13 @@ class SignUpEvent extends AuthEvent {
   final String password;
 
   SignUpEvent({required this.email, required this.password});
+
+  @override
+  List<Object> get props => [email, password];
 }
 
 class GoogleSignInEvent extends AuthEvent {}
 
 class SignOutEvent extends AuthEvent {}
 
-class AuthEventState {
-  final User? user;
-  final bool isLoading;
-  final String? errorMessage;
 
-  AuthEventState({this.user, this.isLoading = false, this.errorMessage});
-}

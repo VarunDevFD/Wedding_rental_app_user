@@ -1,41 +1,39 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'auth_bloc_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vr_wedding_rental/core/di/injectors.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/auth_user.dart';
-import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_email_password.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_google.dart';
+import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_email_password.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_up_with_email_password.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_state.dart';
-import 'auth_bloc_event.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
-  final SignInWithEmailPassword signInWithEmailPassword;
-  final SignUpWithEmailPassword signUpWithEmailPassword;
   final SignInWithGoogle googleSignIn;
-  final GetCurrentUser getCurrentUser;
 
-  AuthBloc({
-    required this.signInWithEmailPassword,
-    required this.signUpWithEmailPassword,
-    required this.googleSignIn,
-    required this.getCurrentUser,
-  }) : super(AuthInitial()) {
-    // Handle SignInEvent
+  AuthBloc({required this.googleSignIn}) : super(AuthInitial()) {
+    //------------------------------SignInEvent---------------------------------
+
     on<SignInEvent>((event, emit) async {
       emit(AuthLoading());
+      final signIn = serviceLocator<SignInWithEmailPassword>();
+      final getCurrentUser = serviceLocator<GetCurrentUser>();
       try {
-        await signInWithEmailPassword(event.email, event.password);
-        emit(Authenticated(User as User));
+        await signIn(event.email, event.password);
+        final user = getCurrentUser(); // Fetch the current authenticated user
+        emit(Authenticated(user!));
       } catch (e) {
         emit(AuthError(e.toString())); // Emit error state
       }
     });
 
-    // Handle SignUpEvent
+    //------------------------------SignUpEvent---------------------------------
     on<SignUpEvent>((event, emit) async {
       emit(AuthLoading());
+      final signUp = serviceLocator<SignUpWithEmailPassword>();
+      final getCurrentUser = serviceLocator<GetCurrentUser>();
       try {
         // Call the sign-up method
-        await signUpWithEmailPassword(event.email, event.password);
+        await signUp(event.email, event.password);
 
         // Fetch the current authenticated user
         final user = getCurrentUser();
@@ -50,7 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
       }
     });
 
-    // Handle GoogleSignInEvent
+    //----------------------GoogleSignInEvent-----------------------------------
     on<GoogleSignInEvent>((event, emit) async {
       emit(AuthLoading());
       try {
