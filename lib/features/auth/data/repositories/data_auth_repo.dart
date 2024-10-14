@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:vr_wedding_rental/core/di/injectors.dart';
 import 'package:vr_wedding_rental/core/error/failure.dart';
 import 'package:vr_wedding_rental/features/auth/data/datasources/data_auth_datasourse.dart';
 import 'package:vr_wedding_rental/features/auth/domain/repositories/auth_repo.dart';
@@ -7,11 +8,9 @@ import 'package:vr_wedding_rental/features/auth/domain/repositories/auth_repo.da
 import '../../domain/entities/user_entity.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource remoteDataSource;
+  final remoteDataSource = serviceLocator<AuthRemoteDataSource>();
 
-  AuthRepositoryImpl({
-    required this.remoteDataSource,
-  });
+  AuthRepositoryImpl(Object object);
 
   @override
   Future<AuthUser?> signInWithEmailPassword(
@@ -45,7 +44,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<User?> signInWithGoogle() async {
     final user = await remoteDataSource.signInWithGoogle();
     if (user != null) {}
-    return null;
+    return user;
   }
 
   @override
@@ -53,7 +52,13 @@ class AuthRepositoryImpl implements AuthRepository {
     return remoteDataSource.getCurrentUser();
   }
 
+  @override
   Future<void> signOut() async {
-    await remoteDataSource.signOut();
+    return await remoteDataSource.signOut();
+  }
+
+  @override
+  Future<void> sendPasswordResetEmail(String email) {
+    throw UnimplementedError();
   }
 }

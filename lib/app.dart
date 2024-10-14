@@ -14,10 +14,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => AuthBloc(
-            // signInWithEmailPassword: GetIt.I(),
-            // signUpWithEmailPassword: GetIt.I(),
             googleSignIn: GetIt.I(),
-            // getCurrentUser: GetIt.I(),
+            googleSignOut: GetIt.I(),
           ),
         ),
         BlocProvider(create: (_) => ForgetPasswordBloc()),

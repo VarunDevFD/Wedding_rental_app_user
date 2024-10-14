@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -15,19 +17,18 @@ import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth
 import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_event.dart';
 
 class SignUpScreen extends StatelessWidget {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
-  final FocusNode emailFocusNode = FocusNode();
-  final FocusNode newPasswordFocusNode = FocusNode();
-  final FocusNode confirmPasswordFocusNode = FocusNode();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final emailFocusNode = FocusNode();
+  final newPasswordFocusNode = FocusNode();
+  final confirmPasswordFocusNode = FocusNode();
+  final formKey = GlobalKey<FormState>();
 
   SignUpScreen({super.key});
 
-  void submitCredentials(BuildContext context) {
+  void submitCredentials(BuildContext context)  {
     if (formKey.currentState?.validate() == true) {
       BlocProvider.of<AuthBloc>(context).add(
         SignUpEvent(

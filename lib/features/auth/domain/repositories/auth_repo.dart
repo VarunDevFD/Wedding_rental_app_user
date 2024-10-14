@@ -8,8 +8,13 @@ abstract class AuthRepository {
   //--------------------Sign-Up-------------------------------------------------
   Future<void> signUpWithEmailPassword(String email, String password);
 
+  //--------------------Forget-Password-----------------------------------------
+  Future<void> sendPasswordResetEmail(String email);
+
   //--------------------Get-Current-User----------------------------------------
   User? getCurrentUser();
+
+  //--------------------Sign-In-Google------------------------------------------
 
   Future<User?> signInWithGoogle() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -23,4 +28,7 @@ abstract class AuthRepository {
     }
     return null;
   }
+
+  //--------------------Sign-Out------------------------------------------------
+  Future<void> signOut();
 }

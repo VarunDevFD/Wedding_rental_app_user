@@ -66,13 +66,11 @@ class AuthRemoteDataSource {
       }
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
+      final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      UserCredential userCredential =
-          await firebaseAuth.signInWithCredential(credential);
-      return userCredential.user;
+      return (await firebaseAuth.signInWithCredential(credential)).user;
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase exceptions
       throw Exception('Google sign in failed: ${e.message}');
@@ -97,8 +95,8 @@ class AuthRemoteDataSource {
 
   Future<void> signOut() async {
     try {
-      await firebaseAuth.signOut();
-      await googleSignIn.signOut();
+      await firebaseAuth.signOut(); // Sign out from Firebase
+      await googleSignIn.signOut(); // Sign out from Google
     } catch (e) {
       throw Exception('Sign out failed: $e');
     }

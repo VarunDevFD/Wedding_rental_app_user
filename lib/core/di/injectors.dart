@@ -9,6 +9,7 @@ import 'package:vr_wedding_rental/features/auth/domain/repositories/auth_repo.da
 import 'package:vr_wedding_rental/features/auth/domain/usecases/auth_user.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_email_password.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_google.dart';
+import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_out.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_up_with_email_password.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
 
@@ -19,6 +20,7 @@ Future<void> init() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   //--------------------Auth-Firebase-dependencies------------------------------
   serviceLocator
       .registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
@@ -34,18 +36,23 @@ Future<void> init() async {
 
   //--------------------Auth Repositories---------------------------------------
   serviceLocator.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(remoteDataSource: serviceLocator()),
-  );
+      () => AuthRepositoryImpl(serviceLocator<AuthRemoteDataSource>()));
 
   //--------------------Auth Use Cases------------------------------------------
+  serviceLocator.registerLazySingleton<SignUpWithEmailPassword>(
+      () => SignUpWithEmailPassword(serviceLocator<AuthRepository>()));
+  serviceLocator.registerLazySingleton<SignInWithEmailPassword>(
+      () => SignInWithEmailPassword(serviceLocator<AuthRepository>()));
+  serviceLocator.registerLazySingleton<SignInWithGoogle>(
+      () => SignInWithGoogle(serviceLocator<AuthRepository>()));
+  serviceLocator.registerLazySingleton<GetCurrentUser>(
+      () => GetCurrentUser(repository: serviceLocator<AuthRepository>()));
+
+  //--------------------Auth Bloc-----------------------------------------------
   serviceLocator
-      .registerLazySingleton(() => SignUpWithEmailPassword(serviceLocator()));
-  serviceLocator
-      .registerLazySingleton(() => SignInWithEmailPassword(serviceLocator()));
-  serviceLocator
-      .registerLazySingleton(() => SignInWithGoogle(serviceLocator()));
-  serviceLocator.registerLazySingleton(
-      () => GetCurrentUser(repository: serviceLocator()));
-  serviceLocator
-      .registerLazySingleton(() => AuthBloc(googleSignIn: serviceLocator()));
+      .registerLazySingleton(() => SignOut(serviceLocator<AuthRepository>()));
+
+  serviceLocator.registerLazySingleton(() => AuthBloc(
+      googleSignIn: serviceLocator<SignInWithGoogle>(),
+      googleSignOut: serviceLocator<SignOut>()));
 }

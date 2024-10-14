@@ -67,7 +67,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                       // Show error message
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(state.error.message ?? 'An error occurred'),
+                          content: Text(state.error.message),
                         ),
                       );
                     }

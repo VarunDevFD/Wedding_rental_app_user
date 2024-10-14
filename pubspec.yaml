@@ -51,6 +51,7 @@ dependencies:
   dartz: ^0.10.0
   carousel_slider: ^5.0.0
   equatable: ^2.0.5
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_event.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
@@ -15,9 +19,12 @@ class ProfileScreen extends StatelessWidget {
             pinned: true,
             actions: [
               IconButton(
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.logout_outlined),
                 onPressed: () {
-                  // Handle settings action
+                  // When you want to sign out (for example, in a button press)
+                  context.read<AuthBloc>().add(SignOutEvent());
+                  // Navigate to WelcomeScreen after sign out
+                  context.go('/welcome');
                 },
               ),
             ],
@@ -99,7 +106,7 @@ class ProfileItemList extends StatelessWidget {
               ? const Color.fromARGB(192, 241, 255, 241)
               : const Color.fromARGB(116, 210, 235, 255),
           leading: const Icon(Icons.person), // Replace with relevant icons
-          title: Text("Pro  file Item $index"),
+          title: Text("Profile Item $index"),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
             // Handle list item tap

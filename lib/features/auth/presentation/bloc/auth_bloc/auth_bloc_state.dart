@@ -31,4 +31,7 @@ class AuthError extends AuthBlocState {
   List<Object?> get props => [message]; // Compare based on the error message
 }
 
+class Unauthenticated extends AuthBlocState {}
+
+
 
