@@ -1,10 +1,11 @@
-import 'package:equatable/equatable.dart';
-
-abstract class SplashState extends Equatable {
-  @override
-  List<Object> get props => [];
-}
+abstract class SplashState {}
 
 class SplashInitial extends SplashState {}
 
-class SplashLoaded extends SplashState {}
+class GoToOnboarding extends SplashState {}
+
+class GoToHome extends SplashState {}
+
+class GoToWelcome extends SplashState {}
+
+class GoToCategory extends SplashState {}

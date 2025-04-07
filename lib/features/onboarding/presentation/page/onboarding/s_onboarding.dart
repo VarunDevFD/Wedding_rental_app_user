@@ -1,97 +1,114 @@
-import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:vr_wedding_rental/core/shr_pref/repository/preference_repository.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_colors.dart';
+import 'package:vr_wedding_rental/core/utils/widgets/custom_button.dart';
+import 'package:vr_wedding_rental/core/utils/widgets/custom_text.dart';
+import 'package:vr_wedding_rental/features/onboarding/presentation/bloc/onboarding_bloc/onboarding_bloc.dart';
+import 'package:vr_wedding_rental/features/onboarding/presentation/bloc/onboarding_bloc/onboarding_state.dart';
 import 'package:vr_wedding_rental/features/onboarding/presentation/widget/w_onboardingpage.dart';
 
-import '../../../data/repositories/d_onboarding_repository_impl.dart';
-import '../../../domain/usecases/get_onboarding_pages_usecase.dart';
-import '../../bloc/onboarding_bloc/onboarding_bloc.dart';
-import '../../bloc/onboarding_bloc/onboarding_event.dart';
-import '../../bloc/onboarding_bloc/onboarding_state.dart';
-
-class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({super.key});
-
-  // Async function to set SharedPreferences outside of BuildContext usage
-  Future<void> setOnboardingCompleted() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('hasSeenOnboarding', true);
-  }
+class OnBoardingScreen extends StatelessWidget {
+  final PageController _pageController = PageController();
+  OnBoardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final PageController pageController = PageController();
-
-    return BlocProvider(
-      create: (_) =>
-          OnboardingBloc(GetOnboardingPagesUseCase(OnboardingRepositoryImpl()))
-            ..add(LoadOnboarding()),
-      child: Scaffold(
-        body: BlocBuilder<OnboardingBloc, OnboardingState>(
+    return Scaffold(
+      body: SafeArea(
+        child: BlocBuilder<OnboardingCubit, OnboardingState>(
           builder: (context, state) {
-            if (state is OnboardingLoaded) {
-              return ColorfulSafeArea(
-                color: const Color.fromARGB(255, 255, 255, 255),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: PageView.builder(
-                        controller: pageController,
-                        itemCount: state.pages.length,
-                        itemBuilder: (context, index) {
-                          final page = state.pages[index];
-
-                          // Define isLastPage inside itemBuilder
-                          final bool isLastPage =
-                              index == state.pages.length - 1;
-
-                          return OnboardingPageWidget(
-                            imagePath: page.imagePath,
-                            text: page.text,
-                            subText: page.subText,
-                            onSkipPressed: () {
-                              pageController.jumpToPage(state.pages.length - 1);
-                            },
-                            onContinuePressed: () async {
-                              if (isLastPage) {
-                                await setOnboardingCompleted();
-                                // ignore: use_build_context_synchronously
-                                context.go('/welcome');
-                              } else {
-                                pageController.nextPage(
-                                  duration: const Duration(milliseconds: 96),
-                                  curve: Curves.easeIn,
-                                );
-                              }
-                            },
-                            isLastPage: isLastPage,
-                          );
-                        },
+            if (state.isLoading) {
+              const Center(child: CircularProgressIndicator());
+            }
+            if (state.error != null) {
+              return Center(child: Text(state.error!));
+            }
+            return Stack(
+              children: [
+                PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    context.read<OnboardingCubit>().nextPage(index);
+                  },
+                  children: state.pages
+                      .map((page) =>
+                          Center(child: OnboardingPage(pageData: page)))
+                      .toList(),
+                ),
+                if (state.currentPage < state.pages.length - 1)
+                  Positioned(
+                    top: 40.h,
+                    right: 20.w,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppColors.buttonTextColor,
+                        padding: EdgeInsets.zero,
+                      ),
+                      onPressed: () {
+                        context.read<OnboardingCubit>().skipToEnd();
+                        _pageController.jumpToPage(state.pages.length - 1);
+                      },
+                      child: const CustomText(
+                        text: 'Skip',
+                        styleType: TextStyleType.body,
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: SmoothPageIndicator(
-                        controller: pageController,
-                        count: state.pages.length,
-                        effect: const JumpingDotEffect(
-                          dotWidth: 8,
-                          dotHeight: 8,
-                          spacing: 16,
-                          activeDotColor: AppColors.buttonTextColor,
-                          dotColor: AppColors.backgroundColor,
+                  ),
+                Positioned(
+                  bottom: 30.h,
+                  left: 20.w,
+                  right: 20.w,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          state.pages.length,
+                          (index) => Container(
+                            margin: EdgeInsets.symmetric(horizontal: 4.0.w),
+                            width: 8.0.w,
+                            height: 8.0.h,
+                            decoration: BoxDecoration(
+                              color: state.currentPage == index
+                                  ? AppColors.white
+                                  : AppColors.grey,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 20.h),
+                      CustomButton(
+                        onPressed: state.currentPage == state.pages.length - 1
+                            ? () {
+                                // Set shared preference and then navigate
+                                PreferencesRepository()
+                                    .setHasSeenOnboarding(true)
+                                    .then((_) {
+                                  // ignore: use_build_context_synchronously
+                                  context.go(
+                                      '/welcome'); // Use context after async call completes
+                                });
+                              }
+                            : () {
+                                _pageController.nextPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                        text: (state.currentPage == state.pages.length - 1
+                            ? 'Get Started'
+                            : 'Next'),
+                      ),
+                    ],
+                  ),
                 ),
-              );
-            }
-            return const Center(child: CircularProgressIndicator());
+              ],
+            );
           },
         ),
       ),

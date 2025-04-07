@@ -1,9 +1,9 @@
-class OnboardingPage {
+class OnboardingPageEntity {
   final String imagePath;
   final String text;
   final String subText;
 
-  OnboardingPage({
+  OnboardingPageEntity({
     required this.imagePath,
     required this.text,
     required this.subText,

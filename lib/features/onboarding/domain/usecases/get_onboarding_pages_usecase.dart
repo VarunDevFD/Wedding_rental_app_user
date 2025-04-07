@@ -6,7 +6,7 @@ class GetOnboardingPagesUseCase {
 
   GetOnboardingPagesUseCase(this.repository);
 
-  Future<List<OnboardingPage>> call() {
+  Future<List<OnboardingPageEntity>> call() {
     return repository.getOnboardingPages();
   }
 }

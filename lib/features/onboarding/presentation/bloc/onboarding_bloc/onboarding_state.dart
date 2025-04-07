@@ -1,57 +1,29 @@
-// import 'package:equatable/equatable.dart';
+import 'package:vr_wedding_rental/features/onboarding/domain/entities/d_onboarding_page.dart';
 
-// abstract class OnboardingState extends Equatable {
-//   const OnboardingState();
-// }
+class OnboardingState {
+  final int currentPage;
+  final List<OnboardingPageEntity> pages;
+  final bool isLoading;
+  final String? error;
 
-// class OnboardingInitial extends OnboardingState {
-//   @override
-//   List<Object> get props => [];
-// }
+  const OnboardingState({
+    required this.currentPage,
+    required this.pages,
+    this.isLoading = false,
+    this.error,
+  });
 
-// class OnboardingLoaded extends OnboardingState {
-//   final List<String> pages;
-
-//   const OnboardingLoaded({required this.pages});
-
-//   @override
-//   List<Object> get props => [pages];
-// }
-
-
-import 'package:equatable/equatable.dart';
-import '../../../domain/entities/d_onboarding_page.dart';
-
-// Defining the states
-abstract class OnboardingState extends Equatable {
-  const OnboardingState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-// Initial state
-class OnboardingInitial extends OnboardingState {}
-
-// Loading state
-class OnboardingLoading extends OnboardingState {}
-
-// Loaded state with the onboarding pages
-class OnboardingLoaded extends OnboardingState {
-  final List<OnboardingPage> pages;
-
-  const OnboardingLoaded(this.pages);
-
-  @override
-  List<Object?> get props => [pages];
-}
-
-// Error state
-class OnboardingError extends OnboardingState {
-  final String message;
-
-  const OnboardingError(this.message);
-
-  @override
-  List<Object?> get props => [message];
+  OnboardingState copyWith({
+    int? currentPage,
+    List<OnboardingPageEntity>? pages,
+    bool? isLoading,
+    String? error,
+  }) {
+    return OnboardingState(
+      currentPage: currentPage ?? this.currentPage,
+      pages: pages ?? this.pages,
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
+    );
+  }
 }
