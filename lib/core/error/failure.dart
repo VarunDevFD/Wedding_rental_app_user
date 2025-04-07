@@ -1,11 +1,9 @@
-// lib/core/error/failure.dart
-
-abstract class Failure {
+class Failure {
   final String message;
 
-  Failure([this.message = ""]);
+  const Failure({required this.message});
 }
 
 class ServerFailure extends Failure {
-  ServerFailure([super.message = "Server Failure"]);
+  ServerFailure({super.message = 'Server Failure'});
 }

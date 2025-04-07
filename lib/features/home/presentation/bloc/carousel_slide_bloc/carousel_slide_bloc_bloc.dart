@@ -8,6 +8,7 @@ import 'package:vr_wedding_rental/features/home/presentation/bloc/carousel_slide
 class CarouselBloc extends Bloc<CarouselEvent, CarouselState> {
   int currentIndex = 0;
   final int totalItems;
+  Timer? _timer;
 
   CarouselBloc(this.totalItems) : super(CarouselInitial()) {
     on<NextCarouselEvent>((event, emit) {
@@ -16,9 +17,22 @@ class CarouselBloc extends Bloc<CarouselEvent, CarouselState> {
     });
   }
 
+  // Start the periodic timer to trigger next carousel slide every 5 seconds
   void startCarousel() {
-    Timer.periodic(const Duration(seconds: 5), (timer) {
+    _timer?.cancel(); // Cancel any existing timer
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       add(NextCarouselEvent());
     });
+  }
+
+  // Stop the carousel (cancel the timer)
+  void stopCarousel() {
+    _timer?.cancel();
+  }
+
+  @override
+  Future<void> close() {
+    _timer?.cancel(); // Cancel the timer before closing the bloc
+    return super.close();
   }
 }

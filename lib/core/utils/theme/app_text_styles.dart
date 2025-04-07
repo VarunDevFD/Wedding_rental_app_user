@@ -26,4 +26,29 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     letterSpacing: 1.2,
   );
+
+  static TextStyle customButtonTextStyleSignIn = GoogleFonts.sora(
+    color: AppColors.white,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    letterSpacing: 1.2,
+  );
+
+  static TextStyle buttonTextStyleForgotBn = GoogleFonts.sora(
+    color: AppColors.buttonTextColor,
+    fontSize: 10,
+    fontWeight: FontWeight.bold,
+  );
+
+  static TextStyle buttonTextStyleWelcomeBn2 = GoogleFonts.sora(
+    color: AppColors.buttonTextColor,
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 1.2,
+  );
+
+  static TextStyle titleSignIn = const TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+  );
 }

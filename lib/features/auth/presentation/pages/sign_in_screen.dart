@@ -1,170 +1,154 @@
-// lib/features/auth/presentation/pages/sign_in_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_colors.dart';
-import 'package:vr_wedding_rental/core/utils/theme/app_text_styles.dart';
+import 'package:vr_wedding_rental/core/utils/widgets/custom_button.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_event.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_state.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/widgets/custom_text_field.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/widgets/forgot_password_bn.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/widgets/sign_up_nav_widget.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class SignInScreen extends StatelessWidget {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final emailFocusNode = FocusNode();
+  final passwordFocusNode = FocusNode();
 
-  @override
-  State<SignInScreen> createState() => _SignInScreenState();
-}
+  SignInScreen({super.key});
 
-class _SignInScreenState extends State<SignInScreen> {
-  bool _isPasswordVisible = false;
+  void submitCredentials(BuildContext context) {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    // Validation checks
+    if (email.isEmpty || !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email address.')),
+      );
+      return;
+    }
+
+    if (password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password cannot be empty.')),
+      );
+      return;
+    }
+
+    // Dispatch login event to AuthBloc
+    BlocProvider.of<AuthBloc>(context).add(
+      SignInEvent(email: email, password: password),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign In', style: AppTextStyles.titleStyle),
-        backgroundColor: AppColors.buttonTextColor,
+      body: BlocListener<AuthBloc, AuthBlocState>(
+        listener: (context, state) {
+          if (state is AuthLoading) {
+            // Show loading indicator
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => const Center(child: CircularProgressIndicator()),
+            );
+          } else if (state is Authenticated) {
+            context.pop(); // Remove loading indicator
+            context.go('/home'); // Navigate to home on success
+          } else if (state is AuthError) {
+            context.pop(); // Remove loading indicator
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  _buildWelcomeText(),
+                  const SizedBox(height: 50),
+                  _buildEmailField(context),
+                  const SizedBox(height: 10),
+                  _buildPasswordField(),
+                  const ForgotPasswordBn(),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: "SIGN IN",
+                    onPressed: () => submitCredentials(context),
+                    buttonColor: AppColors.buttonTextColor,
+                  ),
+                  const SizedBox(height: 25),
+                  _buildGoogleSignInButton(context),
+                  const SizedBox(height: 30),
+                  const SignUpNavigation(),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+    );
+  }
+
+  Widget _buildWelcomeText() {
+    return const Column(
+      children: [
+        Text('Let\'s Sign You In', style: TextStyle(fontSize: 30)),
+        Text('Welcome back.', style: TextStyle(fontSize: 18)),
+        Text('You\'ve been missed!', style: TextStyle(fontSize: 18)),
+      ],
+    );
+  }
+
+  Widget _buildEmailField(BuildContext context) {
+    return CustomTextField(
+      controller: emailController,
+      hintText: 'Enter your email',
+      label: 'Email',
+      obscureText: false,
+      onSubmitted: (_) =>
+          FocusScope.of(context).requestFocus(passwordFocusNode),
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return CustomTextField(
+      controller: passwordController,
+      label: 'Password',
+      hintText: 'Enter your password',
+      obscureText: true,
+      focusNode: passwordFocusNode,
+    );
+  }
+
+  Widget _buildGoogleSignInButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () => BlocProvider.of<AuthBloc>(context).add(GoogleSignInEvent()),
+      child: Container(
+        height: 45,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColors.dimBlack,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Please sign in to continue',
-              style: AppTextStyles.subTitleStyle,
-              textAlign: TextAlign.center,
+            SizedBox(
+              height: 25,
+              child: Image.asset('assets/images/google.png'),
             ),
-            SizedBox(height: 20.h),
-            const TextField(
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 10.h),
-            TextField(
-              obscureText: !_isPasswordVisible,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _isPasswordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _isPasswordVisible = !_isPasswordVisible;
-                    });
-                  },
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  // Navigate to Forgot Password Screen
-                },
-                child: Text(
-                  'Forgot Password?',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 14.sp,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 20.h),
-            ElevatedButton(
-              onPressed: () {
-                // Add sign in logic
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.buttonTextColor,
-              ),
-              child: Text('Sign In', style: AppTextStyles.buttonTextStyle),
-            ),
-            SizedBox(height: 20.h),
-            Row(
-              children: [
-                const Expanded(child: Divider(color: AppColors.black)),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0.w),
-                  child: Text(
-                    'OR',
-                    style: AppTextStyles.subTitleStyle,
-                  ),
-                ),
-                const Expanded(child: Divider(color: AppColors.black)),
-              ],
-            ),
-            SizedBox(height: 20.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 50.w,
-                  height: 50.h,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: AppColors.black),
-                  ),
-                  child: IconButton(
-                    icon: FaIcon(
-                      FontAwesomeIcons.google,
-                      color: Colors.red,
-                      size: 24.sp,
-                    ),
-                    onPressed: () {
-                      // Add Google Sign-In logic
-                    },
-                  ),
-                ),
-                SizedBox(width: 20.w),
-                Container(
-                  width: 50.w,
-                  height: 50.h,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: AppColors.black),
-                  ),
-                  child: IconButton(
-                    icon: FaIcon(
-                      FontAwesomeIcons.apple,
-                      color: Colors.black,
-                      size: 24.sp,
-                    ),
-                    onPressed: () {
-                      // Add iOS Sign-In logic
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Don't have an account? ",
-                  style: AppTextStyles.subTitleStyle,
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Navigate to Sign Up Screen
-                  },
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            const SizedBox(width: 10),
+            const Text('Sign in with Google'),
           ],
         ),
       ),

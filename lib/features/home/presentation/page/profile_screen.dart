@@ -1,20 +1,8 @@
-// import 'package:flutter/material.dart';
-
-// class ProfileScreen extends StatelessWidget {
-//   const ProfileScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Scaffold(
-//       body: Placeholder(
-//         child: Text("Hello"),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_event.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
@@ -31,9 +19,12 @@ class ProfileScreen extends StatelessWidget {
             pinned: true,
             actions: [
               IconButton(
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.logout_outlined),
                 onPressed: () {
-                  // Handle settings action
+                  // When you want to sign out (for example, in a button press)
+                  context.read<AuthBloc>().add(SignOutEvent());
+                  // Navigate to WelcomeScreen after sign out
+                  context.go('/welcome');
                 },
               ),
             ],
@@ -41,18 +32,18 @@ class ProfileScreen extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                SizedBox(height: 20.h),
+                const SizedBox(height: 20),
                 _buildProfileCard(),
-                SizedBox(height: 20.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: const Column(
+                const SizedBox(height: 20),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
                     children: [
                       ProfileItemList(),
                     ],
                   ),
                 ),
-                SizedBox(height: 25.h),
+                const SizedBox(height: 25),
               ],
             ),
           ),
@@ -62,33 +53,33 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _buildProfileCard() {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16.w),
+    return const Card(
+      margin: EdgeInsets.symmetric(horizontal: 16),
       child: Padding(
-        padding: EdgeInsets.all(16.w),
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CircleAvatar(
-              radius: 40.r,
-              child: const Image(
+              radius: 40,
+              child: Image(
                 image: AssetImage('assets/images/placeholder.jpeg'),
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             Text(
               'Varun P C',
               style: TextStyle(
-                fontSize: 24.sp,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: 8),
             Text(
               'varunrevathi6@gmail.com',
               style: TextStyle(
-                fontSize: 16.sp,
+                fontSize: 16,
                 color: Colors.grey,
               ),
             ),
@@ -115,7 +106,7 @@ class ProfileItemList extends StatelessWidget {
               ? const Color.fromARGB(192, 241, 255, 241)
               : const Color.fromARGB(116, 210, 235, 255),
           leading: const Icon(Icons.person), // Replace with relevant icons
-          title: Text("Pro  file Item $index"),
+          title: Text("Profile Item $index"),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
             // Handle list item tap
