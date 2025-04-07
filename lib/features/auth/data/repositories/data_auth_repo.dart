@@ -34,7 +34,7 @@ class AuthRepositoryImpl implements AuthRepository {
       // Return Right to indicate success after sending the email
       return const Right(null); // Return Right with a null value for success
     } catch (e) {
-      return const Left(
+      return Left(
         ServerFailure(message: 'Failed to send password reset email'),
       );
     }
@@ -53,12 +53,22 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> signOut() async {
-    return await remoteDataSource.signOut();
+  Future<Either<Failure, void>> signOut() async {
+    try {
+      await remoteDataSource.signOut();
+      return const Right(null);
+    } catch (e) {
+      return Left(ServerFailure()); // Replace with your custom failure
+    }
   }
 
   @override
   Future<void> sendPasswordResetEmail(String email) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> clearAuthUser() {
     throw UnimplementedError();
   }
 }

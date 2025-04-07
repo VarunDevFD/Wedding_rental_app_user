@@ -5,7 +5,5 @@ class Failure {
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure({required super.message});
+  ServerFailure({super.message = 'Server Failure'});
 }
-
-

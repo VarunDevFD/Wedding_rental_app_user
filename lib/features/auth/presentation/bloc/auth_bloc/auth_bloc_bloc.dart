@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vr_wedding_rental/features/auth/domain/repositories/auth_repo.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_out.dart';
 
 import 'auth_bloc_event.dart';
@@ -77,7 +78,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
     on<SignOutEvent>((event, emit) async {
       emit(AuthLoading());
       try {
-        await googleSignOut.call(); // Call sign out method from use case
+        final repo = serviceLocator<AuthRepository>();
+        await repo.signOut(); // Call sign out method from use case
+        await repo.clearAuthUser(); // Clears the local auth token
         emit(Unauthenticated()); // Emit Unauthenticated state
         // Clear the user's session from SharedPreferences
         final prefs = await SharedPreferences.getInstance();

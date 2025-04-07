@@ -22,6 +22,8 @@ class Authenticated extends AuthBlocState {
   List<Object?> get props => [user]; // Compare based on the user
 }
 
+class SignOutSuccessState extends AuthBlocState {}
+
 class AuthError extends AuthBlocState {
   final String message;
 

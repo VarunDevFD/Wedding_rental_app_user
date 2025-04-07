@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -16,6 +17,9 @@ import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth
 final serviceLocator = GetIt.instance;
 
 Future<void> init() async {
+  //---FireBase-Initializing----Ready before any async operation are executed---
+  WidgetsFlutterBinding.ensureInitialized();
+
   //--------------------Connect-with-firebase_options.dart----------------------
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
