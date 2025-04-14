@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_colors.dart';
 import 'package:vr_wedding_rental/core/utils/widgets/custom_button.dart';
@@ -69,27 +70,27 @@ class SignInScreen extends StatelessWidget {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
+              padding: EdgeInsets.symmetric(horizontal: 50.w),
               child: Column(
                 children: [
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   _buildWelcomeText(),
-                  const SizedBox(height: 50),
+                  SizedBox(height: 50.h),
                   _buildEmailField(context),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   _buildPasswordField(),
                   const ForgotPasswordBn(),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   CustomButton(
                     text: "SIGN IN",
                     onPressed: () => submitCredentials(context),
                     buttonColor: AppColors.buttonTextColor,
                   ),
-                  const SizedBox(height: 25),
+                  SizedBox(height: 25.h),
                   _buildGoogleSignInButton(context),
-                  const SizedBox(height: 30),
+                  SizedBox(height: 30.h),
                   const SignUpNavigation(),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                 ],
               ),
             ),

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:vr_wedding_rental/features/home/presentation/bloc/venues_bloc/venues_state.dart';
 
 class HorizontalGridView extends StatelessWidget {
   final int itemCount;
-  const HorizontalGridView({super.key, required this.itemCount});
+  final VenueLoaded state;
+  const HorizontalGridView(
+      {super.key, required this.itemCount, required this.state});
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +21,7 @@ class HorizontalGridView extends StatelessWidget {
         ),
         itemCount: itemCount,
         itemBuilder: (context, index) {
+          final venue = state.venues[index];
           return Card(
             elevation: 4,
             child: Column(
@@ -30,7 +34,7 @@ class HorizontalGridView extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Card $index'),
+                  child: Text('$venue $index'),
                 ),
               ],
             ),

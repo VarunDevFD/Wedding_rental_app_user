@@ -14,13 +14,10 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     PageController pageController = PageController();
 
-    return BlocProvider(
-      create: (_) => NavigationBloc(),
-      child: NavigationHandler.handleNavigation(
-        pageController: pageController,
-        pages: _bottomNavScreens,
-        items: _bottomNavItems,
-      ),
+    return NavigationHandler.handleNavigation(
+      pageController: pageController,
+      pages: _bottomNavScreens,
+      items: _bottomNavItems,
     );
   }
 
@@ -34,7 +31,7 @@ class HomeScreen extends StatelessWidget {
 
   // The screens for each Bottom Navigation tab
   final List<Widget> _bottomNavScreens = [
-    HomePage(),
+    const HomePage(),
     const BookingScreen(),
     const FavoritesScreen(),
     const ProfileScreen(),

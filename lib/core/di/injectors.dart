@@ -15,6 +15,7 @@ import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_goo
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_out.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_up_with_email_password.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:vr_wedding_rental/features/home/presentation/bloc/venues_bloc/venues_bloc.dart';
 import 'package:vr_wedding_rental/features/onboarding/data/repositories/d_onboarding_repository_impl.dart';
 import 'package:vr_wedding_rental/features/onboarding/domain/repositories/r_onboarding_repository.dart';
 import 'package:vr_wedding_rental/features/onboarding/domain/usecases/complete_onboarding.dart';
@@ -87,4 +88,6 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton(() => AuthBloc(
       googleSignIn: serviceLocator<SignInWithGoogle>(),
       googleSignOut: serviceLocator<SignOut>()));
+
+  serviceLocator.registerFactory(() => HomeBloc());
 }
