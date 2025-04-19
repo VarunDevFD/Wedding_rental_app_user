@@ -1,11 +1,9 @@
+import 'package:vr_wedding_rental/core/di/injectors.dart';
 import 'package:vr_wedding_rental/features/auth/domain/repositories/auth_repo.dart';
 
 class SignInWithEmailPassword {
-  final AuthRepository repository;
+  final repository = serviceLocator<AuthRepository>(); // GetIt instance
 
-  SignInWithEmailPassword(this.repository);
-
-  Future<void> call(String email, String password) async {
-    return await repository.signInWithEmailPassword(email, password);
-  }
+  Future<void> call(String email, String password) async =>
+      await repository.signInWithEmailPassword(email, password);
 }

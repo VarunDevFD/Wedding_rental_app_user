@@ -10,7 +10,6 @@ import '../../domain/entities/user_entity.dart';
 class AuthRepositoryImpl implements AuthRepository {
   final remoteDataSource = serviceLocator<AuthRemoteDataSource>();
 
-  AuthRepositoryImpl(Object object);
 
   @override
   Future<AuthUser?> signInWithEmailPassword(
@@ -24,8 +23,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> signUpWithEmailPassword(String email, String password) {
-    return remoteDataSource.signUpWithEmailPassword(email, password);
+  Future<void> signUpWithEmailPassword(String name,String email, String password) {
+    return remoteDataSource.signUpWithEmailPassword( name,email, password);
   }
 
   Future<Either<Failure, void>> resetPassword({required String email}) async {
@@ -47,10 +46,7 @@ class AuthRepositoryImpl implements AuthRepository {
     return user;
   }
 
-  @override
-  User? getCurrentUser() {
-    return remoteDataSource.getCurrentUser();
-  }
+   
 
   @override
   Future<Either<Failure, void>> signOut() async {

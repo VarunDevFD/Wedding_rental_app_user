@@ -1,34 +1,28 @@
 import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vr_wedding_rental/features/auth/domain/repositories/auth_repo.dart';
+import 'package:vr_wedding_rental/core/di/injectors.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_out.dart';
-
 import 'auth_bloc_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vr_wedding_rental/core/di/injectors.dart';
-import 'package:vr_wedding_rental/features/auth/domain/usecases/auth_user.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_google.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_email_password.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_up_with_email_password.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
-  final SignInWithGoogle googleSignIn;
-  final SignOut googleSignOut;
-
-  AuthBloc({required this.googleSignIn, required this.googleSignOut}) : super(AuthInitial()) {
+  AuthBloc() : super(AuthInitial()) {
     //------------------------------SignInEvent---------------------------------
 
     on<SignInEvent>((event, emit) async {
       emit(AuthLoading());
       final signIn = serviceLocator<SignInWithEmailPassword>();
-      final getCurrentUser = serviceLocator<GetCurrentUser>();
+      // final getCurrentUser = serviceLocator<GetCurrentUser>();
       try {
         await signIn(event.email, event.password);
-        final user = getCurrentUser(); // Fetch the current authenticated user
+        // final user = getCurrentUser(); // Fetch the current authenticated user
         await _setHasSeenHome(); // Call to save flag in SharedPreferences
-        emit(Authenticated(user!));
+        emit(const Authenticated(true));
       } catch (e) {
         emit(AuthError(e.toString())); // Emit error state
       }
@@ -38,33 +32,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
     on<SignUpEvent>((event, emit) async {
       emit(AuthLoading());
       final signUp = serviceLocator<SignUpWithEmailPassword>();
-      final getCurrentUser = serviceLocator<GetCurrentUser>();
       try {
         // Call the sign-up method
-        await signUp(event.email, event.password);
+        await signUp.call(event.name, event.email, event.password);
+        await _setHasSeenHome(); // Call to save flag in SharedPreferences
+        emit(const Authenticated(true)); // Emit Authenticated state with User
 
-        // Fetch the current authenticated user
-        final user = getCurrentUser();
-
-        if (user != null) {
-          await _setHasSeenHome(); // Call to save flag in SharedPreferences
-          emit(Authenticated(user)); // Emit Authenticated state with User
-        } else {
-          emit(const AuthError('Sign up failed. Please try again.'));
-        }
       } catch (e) {
         emit(AuthError(e.toString())); // Emit error state
       }
     });
 
-    //----------------------GoogleSignInEvent-----------------------------------
+    //----------------------Sign-In-Google-Event--------------------------------
     on<GoogleSignInEvent>((event, emit) async {
+      final googleSignIn = serviceLocator<SignInWithGoogle>();
       emit(AuthLoading());
       try {
-        final user = await googleSignIn(); // Call the sign-in method
+        final user = await googleSignIn.call(); // Call the sign-in method
         log(user.toString());
         if (user != null) {
-          emit(Authenticated(user)); // Emit Authenticated state
+          emit(const Authenticated(true)); // Emit Authenticated state
           await _setHasSeenHome(); // Call to save flag in SharedPreferences
         } else {
           emit(const AuthError('Google sign-in failed')); // Emit error state
@@ -76,12 +63,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
 
     //----------------------Sign-Out--------------------------------------------
     on<SignOutEvent>((event, emit) async {
+      final signOut = serviceLocator<SignOut>();
       emit(AuthLoading());
       try {
-        final repo = serviceLocator<AuthRepository>();
-        await repo.signOut(); // Call sign out method from use case
-        await repo.clearAuthUser(); // Clears the local auth token
-        emit(Unauthenticated()); // Emit Unauthenticated state
+        await signOut.call(); // Call the sign-out method
+        emit(SignOutSuccessState());
+
         // Clear the user's session from SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('hasSeenHome'); // Optionally, remove the home flag

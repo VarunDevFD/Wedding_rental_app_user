@@ -8,6 +8,7 @@ import 'package:vr_wedding_rental/core/utils/validation_helper.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_colors.dart';
 import 'package:vr_wedding_rental/core/utils/widgets/custom_button.dart';
 import 'package:vr_wedding_rental/core/utils/widgets/custom_divider_widget.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_state.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/bloc/toggle_bloc/toggle_bloc_bloc.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/widgets/password_field.dart';
@@ -28,66 +29,80 @@ class SignUpScreen extends StatelessWidget {
 
   SignUpScreen({super.key});
 
-  void submitCredentials(BuildContext context)  {
+  void submitCredentials(BuildContext context) {
     if (formKey.currentState?.validate() == true) {
       BlocProvider.of<AuthBloc>(context).add(
         SignUpEvent(
+          name: nameController.text,
           email: emailController.text,
           password: newPasswordController.text,
         ),
       );
-      context.go('/home');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocProvider(
-        create: (_) => TogglePasswordBloc(),
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Center(
-            child: Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 25),
-                      Text("Create an Account",
-                          style: AppTextStyles.titleSignIn),
-                      const SizedBox(height: 50),
-                      _buildTextField(
-                          context, nameController, 'Name', 'Enter your Name'),
-                      const SizedBox(height: 10),
-                      _buildTextField(
-                          context, emailController, 'Email', 'Enter your email',
-                          validateEmail: ValidationHelper.validateEmail),
-                      const SizedBox(height: 10),
-                      PasswordField(
-                        newPasswordController: newPasswordController,
-                        newPasswordFocusNode: newPasswordFocusNode,
-                        validatePassword: ValidationHelper.validatePassword,
-                      ),
-                      const SizedBox(height: 10),
-                      ConfirmPasswordField(
-                        confirmPasswordController: confirmPasswordController,
-                        confirmPasswordFocusNode: confirmPasswordFocusNode,
-                        newPasswordController: newPasswordController,
-                      ),
-                      const SizedBox(height: 30),
-                      CustomButton(
-                        text: "SIGN UP",
-                        onPressed: () => submitCredentials(context),
-                        buttonColor: AppColors.buttonTextColor,
-                      ),
-                      const SizedBox(height: 20),
-                      const OrDivider(),
-                      const SizedBox(height: 30),
-                      const SignInNavigation(),
-                    ],
+    return BlocListener<AuthBloc, AuthBlocState>(
+      listener: (context, state) {
+        if (state is Authenticated) {
+          context.go('/home'); // Navigate to home on success
+        } else if (state is AuthError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: AppColors.red,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        body: BlocProvider(
+          create: (_) => TogglePasswordBloc(),
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Center(
+              child: Form(
+                key: formKey,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 25),
+                        Text("Create an Account",
+                            style: AppTextStyles.titleSignIn),
+                        const SizedBox(height: 50),
+                        _buildTextField(
+                            context, nameController, 'Name', 'Enter your Name'),
+                        const SizedBox(height: 10),
+                        _buildTextField(context, emailController, 'Email',
+                            'Enter your email',
+                            validateEmail: ValidationHelper.validateEmail),
+                        const SizedBox(height: 10),
+                        PasswordField(
+                          newPasswordController: newPasswordController,
+                          newPasswordFocusNode: newPasswordFocusNode,
+                          validatePassword: ValidationHelper.validatePassword,
+                        ),
+                        const SizedBox(height: 10),
+                        ConfirmPasswordField(
+                          confirmPasswordController: confirmPasswordController,
+                          confirmPasswordFocusNode: confirmPasswordFocusNode,
+                          newPasswordController: newPasswordController,
+                        ),
+                        const SizedBox(height: 30),
+                        CustomButton(
+                          text: "SIGN UP",
+                          onPressed: () => submitCredentials(context),
+                          buttonColor: AppColors.buttonTextColor,
+                        ),
+                        const SizedBox(height: 20),
+                        const OrDivider(),
+                        const SizedBox(height: 30),
+                        const SignInNavigation(),
+                      ],
+                    ),
                   ),
                 ),
               ),

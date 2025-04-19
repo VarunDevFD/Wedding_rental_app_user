@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/pages/forgot_screen.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/pages/sign_in_screen.dart';
@@ -7,8 +8,11 @@ import 'package:vr_wedding_rental/features/onboarding/presentation/page/onboardi
 import 'package:vr_wedding_rental/features/onboarding/presentation/page/splash_page/s_splash.dart';
 import 'package:vr_wedding_rental/features/welcome/data/domain/presentation/page/s_welcome.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 class AppRouter {
   static final GoRouter router = GoRouter(
+    navigatorKey: navigatorKey,
     routes: [
       GoRoute(
         path: '/',

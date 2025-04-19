@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_event.dart';
+import 'package:vr_wedding_rental/features/auth/presentation/bloc/auth_bloc/auth_bloc_state.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
@@ -11,43 +12,49 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: const Text('My Profile'),
-            pinned: true,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.logout_outlined),
-                onPressed: () {
-                  // When you want to sign out (for example, in a button press)
-                  context.read<AuthBloc>().add(SignOutEvent());
-                  // Navigate to WelcomeScreen after sign out
-                  context.go('/welcome');
-                },
-              ),
-            ],
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                const SizedBox(height: 20),
-                _buildProfileCard(),
-                const SizedBox(height: 20),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      ProfileItemList(),
-                    ],
-                  ),
+    return BlocListener<AuthBloc, AuthBlocState>(
+      listener: (context, state) {
+        if (state is SignOutSuccessState) {
+          context.go('/welcome');
+        }
+      },
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: const Text('My Profile'),
+              pinned: true,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.logout_outlined),
+                  onPressed: () {
+                    // When you want to sign out (for example, in a button press)
+                    context.read<AuthBloc>().add(SignOutEvent());
+                    // Navigate to WelcomeScreen after sign out
+                  },
                 ),
-                const SizedBox(height: 25),
               ],
             ),
-          ),
-        ],
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  const SizedBox(height: 20),
+                  _buildProfileCard(),
+                  const SizedBox(height: 20),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: [
+                        ProfileItemList(),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
