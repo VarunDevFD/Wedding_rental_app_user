@@ -19,7 +19,7 @@ class OnboardingScreen extends StatelessWidget {
   // Async function to set SharedPreferences outside of BuildContext usage
   Future<void> setOnboardingCompleted() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('hasSeenOnboarding', true);
+    await prefs.setBool('', true);
   }
 
   @override

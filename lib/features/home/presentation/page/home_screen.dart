@@ -4,7 +4,7 @@ import 'package:vr_wedding_rental/core/navigation/bloc/navigation_bloc.dart';
 import 'package:vr_wedding_rental/core/navigation/navigation_handler.dart';
 import 'package:vr_wedding_rental/features/home/presentation/page/booking_screen.dart';
 import 'package:vr_wedding_rental/features/home/presentation/page/favorites_screen.dart';
-import 'package:vr_wedding_rental/features/home/presentation/page/profile_screen.dart';
+import 'package:vr_wedding_rental/features/profile/presentation/pages/profile_screen.dart';
 import 'package:vr_wedding_rental/features/home/presentation/page/home_page.dart';
 
 class HomeScreen extends StatelessWidget {

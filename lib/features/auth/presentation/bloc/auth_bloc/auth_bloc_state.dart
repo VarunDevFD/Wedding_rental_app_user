@@ -1,3 +1,5 @@
+import 'package:vr_wedding_rental/features/auth/domain/entities/user_entity.dart';
+
 abstract class AuthBlocState {
   const AuthBlocState();
 }
@@ -7,7 +9,7 @@ class AuthInitial extends AuthBlocState {}
 class AuthLoading extends AuthBlocState {}
 
 class Authenticated extends AuthBlocState {
-  final bool user;
+  final AuthUser user; 
 
   const Authenticated(this.user);
 }
@@ -19,4 +21,3 @@ class AuthError extends AuthBlocState {
 
   const AuthError(this.message);
 }
-

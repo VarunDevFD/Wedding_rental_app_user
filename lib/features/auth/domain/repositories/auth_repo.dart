@@ -1,33 +1,27 @@
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vr_wedding_rental/core/error/failure.dart';
+import 'package:vr_wedding_rental/features/auth/domain/entities/user_entity.dart';
 
 abstract class AuthRepository {
   //--------------------Sign-In-------------------------------------------------
-  Future<void> signInWithEmailPassword(String email, String password);
+  Future<Either<String, AuthUser>> signInWithEmailPassword({
+    required String email,
+    required String password,
+  });
 
   //--------------------Sign-Up-------------------------------------------------
-  Future<void> signUpWithEmailPassword(
-      String name, String email, String password);
+  Future<Either<String, AuthUser>> signUpWithEmailPassword({
+    required String name,
+    required String email,
+    required String password, 
+  }); // AuthUserModel
 
   //--------------------Forget-Password-----------------------------------------
   Future<void> sendPasswordResetEmail(String email);
 
   //--------------------Sign-In-Google------------------------------------------
 
-  Future<User?> signInWithGoogle() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    if (googleUser != null) {
-      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      await FirebaseAuth.instance.signInWithCredential(credential);
-    }
-    return null;
-  }
+  Future<Either<String, AuthUser>> signInWithGoogle();
 
   //--------------------Sign-Out------------------------------------------------
   Future<Either<Failure, void>> signOut();
