@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vr_wedding_rental/features/home/presentation/bloc/firebase_category/firebase_category_bloc_bloc.dart';
+import 'package:vr_wedding_rental/features/home/presentation/bloc/firebase_category/firebase_category_bloc_event.dart';
+import 'package:vr_wedding_rental/features/home/presentation/bloc/firebase_category/firebase_category_bloc_state.dart';
+import 'package:vr_wedding_rental/features/home/presentation/widgets/animated_search_bar.dart';
 import 'package:vr_wedding_rental/features/home/presentation/widgets/carousel_widget.dart';
 import 'package:vr_wedding_rental/features/home/presentation/widgets/section_header.dart';
 import 'package:vr_wedding_rental/features/home/presentation/widgets/horizontal_grid_view.dart';
@@ -10,24 +15,68 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CarouselWidget(carouselItems: carouselItems),
-              const SectionHeader(title: 'Popular'),
-              const HorizontalGridView(itemCount: 10), // Popular items
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: BlocConsumer<FirebaseCategoryBloc, FirebaseCategoryState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              if (state is FirebaseCategoryBlocInitial) {
+                context.read<FirebaseCategoryBloc>().add(VenueCategoryEvent());
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is FirestoreCategoryLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is FirebaseCategoryLoaded) {
+                return ListView.builder(
+                  itemCount: state.venues.length,
+                  itemBuilder: (context, index) {
+                    final venue = state.venues[index];
+                    // return VenueCard(venue: venue);
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const AnimatedSearchBar(),
+                        CarouselWidget(carouselItems: carouselItems),
+                        const SectionHeader(title: 'Venues'),
+                        HorizontalGridView(
+                            itemCount: state.venues.length), // Popular items
 
-              const SizedBox(height: 20), // Space between sections
+                        const SizedBox(height: 20), // Space between sections
 
-              const SectionHeader(title: 'Recently'),
-              const HorizontalGridView(itemCount: 10), // Recently added items
-            ],
+                        const SectionHeader(title: 'Recently'),
+                        const HorizontalGridView(
+                            itemCount: 10), // Recently added items
+                      ],
+                    );
+                  },
+                );
+              } else if (state is FirebaseCategoryError) {
+                return Center(child: Text(state.message));
+              } else {
+                return const Center(child: Text('Unknown state'));
+              }
+            },
           ),
+
+          //   return Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       const AnimatedSearchBar(),
+          //       CarouselWidget(carouselItems: carouselItems),
+          //       const SectionHeader(title: 'Venues'),
+          //       const HorizontalGridView(itemCount: 10), // Popular items
+
+          //       const SizedBox(height: 20), // Space between sections
+
+          //       const SectionHeader(title: 'Recently'),
+          //       const HorizontalGridView(
+          //           itemCount: 10), // Recently added items
+          //     ],
+          //   );
+          // },
         ),
       ),
     );
+    // );
   }
 
   // Carousel Slides

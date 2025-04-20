@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:vr_wedding_rental/features/home/domain/entities/venue.dart';
 
 class HorizontalGridView extends StatelessWidget {
   final int itemCount;
-  const HorizontalGridView({super.key, required this.itemCount});
+  final Venue? venue;
+
+  const HorizontalGridView({
+    super.key,
+    required this.itemCount,
+    this.venue,
+  });
 
   @override
   Widget build(BuildContext context) {
