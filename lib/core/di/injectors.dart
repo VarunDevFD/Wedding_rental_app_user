@@ -13,6 +13,10 @@ import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_ema
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_in_with_google.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_out.dart';
 import 'package:vr_wedding_rental/features/auth/domain/usecases/sign_up_with_email_password.dart';
+import 'package:vr_wedding_rental/features/home/data/datasources/venue_remote_data_source.dart';
+import 'package:vr_wedding_rental/features/home/data/repository/venue_repository_impl.dart';
+import 'package:vr_wedding_rental/features/home/domain/repository/venue_repo_domain.dart';
+import 'package:vr_wedding_rental/features/home/domain/usecases/get_venues.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -64,5 +68,25 @@ Future<void> init() async {
 
   serviceLocator.registerLazySingleton<SignOut>(
     () => SignOut(),
+  );
+
+  //--------------------- Home -------------------------------------------------
+
+  // Register Use Case
+  serviceLocator.registerLazySingleton<GetVenues>(
+    () => GetVenues(serviceLocator()),
+  );
+
+  // Register Repository
+  serviceLocator.registerLazySingleton<VenueRepository>(
+  () => VenueRepositoryImpl(
+    remoteDataSource: serviceLocator<VenueRemoteDataSource>(),
+  ),
+);
+
+  // Register Data Source
+  serviceLocator.registerLazySingleton<VenueRemoteDataSource>(
+    () =>
+        VenueRemoteDataSourceImpl(), // Replace with your actual implementation
   );
 }

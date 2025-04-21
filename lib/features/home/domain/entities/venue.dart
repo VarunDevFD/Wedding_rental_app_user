@@ -1,22 +1,33 @@
 class Venue {
-  final String id;
-  final String name;
-  final String location;
-  final String description;
-  final double price;
-  final List<String> images;
+  final String? name;
+  final int? price;
+  final int? sdPrice;
+  final List<String>? location;
+  final List<String>? images;
+  final String? description;
+  final int? capacity;
+  final String? duration;
+  final String? venueType;
+  final String? phoneNumber;
+  final String? date;
+  final List<String>? facilities;
+  final bool? available;
+  final bool? privacyPolicy;
 
   Venue({
-    required this.id,
-    required this.name,
-    required this.location,
-    required this.description,
-    required this.price,
-    required this.images,
+    this.name,
+    this.price,
+    this.sdPrice,
+    this.location,
+    this.images,
+    this.description,
+    this.capacity,
+    this.duration,
+    this.venueType,
+    this.phoneNumber,
+    this.date,
+    this.facilities,
+    this.available,
+    this.privacyPolicy = false,
   });
-
-  @override
-  String toString() {
-    return 'Venue{id: $id, name: $name, location: $location, description: $description, price: $price, images: $images}';
-  }
 }

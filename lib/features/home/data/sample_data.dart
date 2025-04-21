@@ -1,4 +1,3 @@
-// lib/features/home/data/sample_data.dart
 import '../domain/entities/card_model.dart';
 
 List<CardModel> getSampleCards() {

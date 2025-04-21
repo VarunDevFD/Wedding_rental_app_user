@@ -1,4 +1,3 @@
-// lib/features/home/domain/models/card_model.dart
 class CardModel {
   final String title;
   final String description;
