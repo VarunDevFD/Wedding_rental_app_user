@@ -66,7 +66,6 @@ class CategoryListView extends StatelessWidget {
           foregroundColor: Colors.purple.shade300),
     ];
 
-    // Split categories into two rows
     final firstRow = <CategoryListModel>[];
     final secondRow = <CategoryListModel>[];
     for (int i = 0; i < categories.length; i++) {
@@ -78,7 +77,7 @@ class CategoryListView extends StatelessWidget {
     }
 
     return SizedBox(
-      height: 180, // adjust based on your category height
+      height: 180,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
