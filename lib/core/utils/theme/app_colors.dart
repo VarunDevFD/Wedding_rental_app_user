@@ -9,4 +9,7 @@ class AppColors {
   static const Color buttonTextColor = Color(0xFF789A9F);
   static const Color backgroundColor = Color(0xFFEDF4F5);
   static const Color dimBlack = Color.fromARGB(255, 213, 212, 212);
+  static const Color bottomNavBarBGColor = Color.fromARGB(255, 250, 245, 247);
+  static const Color categoryListModelBGcolor =
+      Color.fromARGB(255, 233, 250, 246);
 }

@@ -24,7 +24,7 @@ class VenueGridView extends StatelessWidget {
             child: GridView.builder(
               scrollDirection: Axis.horizontal,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1, // One card per row
+                crossAxisCount: 1, 
                 childAspectRatio: 0.6,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,

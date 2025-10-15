@@ -36,7 +36,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final authUserModel = await remoteDataSource.signUpWithEmailPassword(
         AuthUserModel(
-          id: '', // ID set by Firebase
+          id: '',
           email: email,
           name: name,
           password: password,

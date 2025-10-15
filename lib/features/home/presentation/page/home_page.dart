@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vr_wedding_rental/features/home/presentation/widgets/animated_search_bar.dart';
 import 'package:vr_wedding_rental/features/home/presentation/widgets/carousel_widget.dart';
+import 'package:vr_wedding_rental/features/home/presentation/widgets/category_list.dart';
 import 'package:vr_wedding_rental/features/home/presentation/widgets/section_header.dart';
 import 'package:vr_wedding_rental/features/home/presentation/widgets/horizontal_grid_view.dart';
 
@@ -18,8 +19,24 @@ class HomePage extends StatelessWidget {
           children: [
             const AnimatedSearchBar(),
             CarouselWidget(carouselItems: carouselItems),
-            const SectionHeader(title: 'Venues'),
-            const VenueGridView(), // Popular items
+            const SectionHeader(title: 'Categories'),
+            const CategoryListView(),
+            const SectionHeader(title: 'Camera'),
+            const VenueGridView(),
+            const SectionHeader(title: 'Dress'),
+            const VenueGridView(),
+            const SectionHeader(title: 'Decoration'),
+            const VenueGridView(),
+            const SectionHeader(title: 'FootWear'),
+            const VenueGridView(),
+            const SectionHeader(title: 'Jewelry'),
+            const VenueGridView(),
+            const SectionHeader(title: 'Sound and Dj'),
+            const VenueGridView(),
+            const SectionHeader(title: 'Vehicle'),
+            const VenueGridView(),
+            const SectionHeader(title: 'Venue'),
+            const VenueGridView(),
 
             const SizedBox(height: 20), // Space between sections
 

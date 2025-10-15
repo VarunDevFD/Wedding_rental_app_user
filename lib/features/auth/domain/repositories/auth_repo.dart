@@ -13,7 +13,7 @@ abstract class AuthRepository {
   Future<Either<String, AuthUser>> signUpWithEmailPassword({
     required String name,
     required String email,
-    required String password, 
+    required String password,
   }); // AuthUserModel
 
   //--------------------Forget-Password-----------------------------------------
