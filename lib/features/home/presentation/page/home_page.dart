@@ -5,8 +5,8 @@ import 'package:vr_wedding_rental/features/home/presentation/widgets/category_li
 import 'package:vr_wedding_rental/features/home/presentation/widgets/section_header.dart';
 import 'package:vr_wedding_rental/features/home/presentation/widgets/horizontal_grid_view.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

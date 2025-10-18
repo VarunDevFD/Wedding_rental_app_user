@@ -8,8 +8,8 @@ import 'package:vr_wedding_rental/features/home/presentation/page/favorites_scre
 import 'package:vr_wedding_rental/features/profile/presentation/pages/profile_screen.dart';
 import 'package:vr_wedding_rental/features/home/presentation/page/home_page.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
 
   // The screens for each Bottom Navigation tab
   final List<Widget> _bottomNavScreens = [
-    HomePage(),
+    HomeScreen(),
     const BookingScreen(),
     const FavoritesScreen(),
     const ProfileScreen(),

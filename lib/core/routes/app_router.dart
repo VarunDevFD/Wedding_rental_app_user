@@ -3,7 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/pages/forgot_screen.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/pages/sign_in_screen.dart';
 import 'package:vr_wedding_rental/features/auth/presentation/pages/sign_up_screen.dart';
-import 'package:vr_wedding_rental/features/home/presentation/page/bottom_navigation_Bar_Items_screen.dart';
+import 'package:vr_wedding_rental/features/home/presentation/page/bottom_navbar_items_screen.dart';
+import 'package:vr_wedding_rental/features/home/presentation/page/search_screen.dart';
 import 'package:vr_wedding_rental/features/onboarding/presentation/page/onboarding/s_onboarding.dart';
 import 'package:vr_wedding_rental/features/onboarding/presentation/page/splash_page/s_splash.dart';
 import 'package:vr_wedding_rental/features/welcome/data/domain/presentation/page/s_welcome.dart';
@@ -36,13 +37,16 @@ class AppRouter {
       ),
       GoRoute(
         path: '/home',
-        builder: (context, state) => HomeScreen(),
+        builder: (context, state) => HomePage(),
       ),
       GoRoute(
         path: '/forgotPassword',
         builder: (context, state) => ForgotPasswordScreen(),
       ),
-       
+      GoRoute(
+        path: '/searchPage',
+        builder: (context, state) => const SearchScreen(),
+      ),
     ],
   );
 }
