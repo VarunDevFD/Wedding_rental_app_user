@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:vr_wedding_rental/core/utils/theme/app_colors.dart';
 import 'package:vr_wedding_rental/features/home/presentation/bloc/animation_search_bar_home_bloc/an_search_bar_state.dart';
 import 'package:vr_wedding_rental/features/home/presentation/bloc/animation_search_bar_home_bloc/an_search_bloc.dart';
+import 'package:vr_wedding_rental/features/home/presentation/widgets/category_card_model.dart';
+import 'package:vr_wedding_rental/features/home/presentation/widgets/category_card_widget.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -144,6 +146,30 @@ class SearchScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    title(),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: categories.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // 2 columns
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                          childAspectRatio: 1.6, // Adjust for shape
+                        ),
+                        itemBuilder: (context, index) {
+                          final category = categories[index];
+                          return CategoryCard(category: category);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -151,6 +177,21 @@ class SearchScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget title() {
+    return const Align(
+      alignment: Alignment.centerLeft,
+      widthFactor: 2.3,
+      child: Text(
+        "Explore Categories",
+        style: TextStyle(
+          color: AppColors.black,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 }
