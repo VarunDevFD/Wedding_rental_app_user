@@ -150,7 +150,6 @@ class SearchScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: GridView.builder(
