@@ -11,21 +11,41 @@ class SearchBarBloc extends Bloc<SearchBarEvent, SearchBarState> {
     'Search by category...',
     'Find your favorite...',
   ];
-  int _currentHintIndex = 0;
+  int _currentHintIndex = 0; 
+  Timer? _timer;
 
-  SearchBarBloc() : super(SearchBarState('Search for items...')) {
-    on<UpdateHintText>((event, emit) => _updateHintText(emit));
-    _startHintAnimation();
+  SearchBarBloc() : super(SearchBarState('Search for items...', opacity: 1.0)) {
+    on<StartHintAnimation>(_onStartHintAnimation);
+    on<FadeOutHint>(_onFadeOutHint);
+    on<UpdateHintText>(_onUpdateHintText);
+    on<FadeInHint>(_onFadeInHint);
   }
 
-  void _updateHintText(Emitter<SearchBarState> emit) {
-    _currentHintIndex = (_currentHintIndex + 1) % hintTextList.length;
-    emit(SearchBarState(hintTextList[_currentHintIndex]));
-  }
-
-  void _startHintAnimation() {
-    Timer.periodic(const Duration(seconds: 3), (timer) {
+ void _onStartHintAnimation(StartHintAnimation event, Emitter<SearchBarState> emit) {
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      add(FadeOutHint());
+      await Future.delayed(const Duration(milliseconds: 500));
       add(UpdateHintText());
+      add(FadeInHint());
     });
+  }
+
+  void _onFadeOutHint(FadeOutHint event, Emitter<SearchBarState> emit) {
+    emit(state.copyWith(opacity: 0));
+  }
+
+  void _onUpdateHintText(UpdateHintText event, Emitter<SearchBarState> emit) {
+    _currentHintIndex = (_currentHintIndex + 1) % hintTextList.length;
+    emit(state.copyWith(text: hintTextList[_currentHintIndex]));
+  }
+
+  void _onFadeInHint(FadeInHint event, Emitter<SearchBarState> emit) {
+    emit(state.copyWith(opacity: 1));
+  }
+
+  @override
+  Future<void> close() {
+    _timer?.cancel();
+    return super.close();
   }
 }

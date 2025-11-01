@@ -12,56 +12,13 @@ class AnimatedSearchBar extends StatelessWidget {
     return BlocBuilder<SearchBarBloc, SearchBarState>(
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 6.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(153),
-                        blurRadius: 5.0,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: TextField(
-                    autofocus:
-                        false, // Ensure the keyboard doesn't pop up immediately
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 12,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        color: AppColors.black,
-                      ),
-                      hintText: state.hintText,
-                      hintStyle: const TextStyle(
-                        color: AppColors.grey,
-                        fontSize: 12,
-                      ),
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                    ),
-                    onSubmitted: (value) {
-                      // Close the keyboard after submission
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8.0),
               Container(
-                height: 38.0,
-                width: 38.0,
+                height: 45.0,
+                width: 45.0,
                 decoration: BoxDecoration(
                   color: AppColors.buttonTextColor,
                   borderRadius: BorderRadius.circular(22.0),
@@ -80,6 +37,58 @@ class AnimatedSearchBar extends StatelessWidget {
                     // Close the keyboard when this button is clicked
                   },
                 ),
+              ),
+              const SizedBox(width: 12.0),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(153),
+                        blurRadius: 5.0,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    autofocus:
+                        false, // Ensure the keyboard doesn't pop up immediately
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 12,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: AppColors.black,
+                      ),
+                      hintText: state.hintText,
+                      hintStyle: const TextStyle(
+                        color: AppColors.grey,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                    ),
+                    onSubmitted: (value) {
+                      // Close the keyboard after submission
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8.0),
+              IconButton(
+                icon: const Icon(Icons.image,
+                    color: AppColors.dimBlack, size: 20),
+                onPressed: () {
+                  // Close the keyboard when this button is clicked
+                },
               ),
             ],
           ),

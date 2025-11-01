@@ -52,4 +52,17 @@ class VenueRemoteDataSourceImpl implements VenueRemoteDataSource {
       rethrow;
     }
   }
+
+  // @override
+  // Future<List<VenueModel>> getPopularCategories() {
+  //   List<String> categories = [
+  //     'Camera',
+  //     'Dress',
+  //     'Decoration',
+  //     'Footwear',
+  //     'Sounds',
+  //     'Venue',
+  //     'Vehicle',
+  //   ];
+  // }
 }
